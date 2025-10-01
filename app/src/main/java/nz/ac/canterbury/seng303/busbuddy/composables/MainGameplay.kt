@@ -1,0 +1,18 @@
+package nz.ac.canterbury.seng303.busbuddy.composables
+
+import Road
+import androidx.compose.foundation.layout.Box
+import nz.ac.canterbury.seng303.busbuddy.R
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+
+@Composable
+fun MainGameplay(modifier: Modifier = Modifier) {
+    Box(modifier = modifier.fillMaxSize()) {
+        Road(
+            modifier = Modifier.fillMaxSize(),
+            imageResId = R.drawable.road
+        )
+    }
+}
