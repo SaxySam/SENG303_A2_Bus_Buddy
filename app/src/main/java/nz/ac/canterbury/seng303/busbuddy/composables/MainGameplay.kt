@@ -14,5 +14,6 @@ fun MainGameplay(modifier: Modifier = Modifier) {
             modifier = Modifier.fillMaxSize(),
             imageResId = R.drawable.road
         )
+        Bus()
     }
 }
