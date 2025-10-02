@@ -22,8 +22,8 @@ import nz.ac.canterbury.seng303.busbuddy.R
 @Composable
 fun Road(
     modifier: Modifier = Modifier,
-    imageResId: Int = R.drawable.road
 ) {
+    val imageResId: Int = R.drawable.road
     val pixelsPerSecond = 1000f;  // change road speed here
     val density = LocalDensity.current
     var containerHeightPx by remember { mutableFloatStateOf(0f) }

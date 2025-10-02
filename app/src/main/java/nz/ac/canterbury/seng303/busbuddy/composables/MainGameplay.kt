@@ -10,22 +10,23 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import nz.ac.canterbury.seng303.busbuddy.models.BusStop
+import nz.ac.canterbury.seng303.busbuddy.models.Player
 
 @Composable
 fun MainGameplay(modifier: Modifier = Modifier) {
-    val score = 30
-    val nextStopMins = 4
+    val player = Player("John", 30)
+    val nextStop = BusStop("Northlands Mall",4)
 
-    Box(modifier = modifier.fillMaxSize()) {
+    Box(modifier.fillMaxSize()) {
         Road(
-            modifier = Modifier.fillMaxSize(),
-            imageResId = R.drawable.road
+            Modifier.fillMaxSize()
         )
         Bus()
         HUD(
-            score = score,
-            nextStopMins = nextStopMins,
-            modifier = Modifier
+            player,
+            nextStop,
+            Modifier
                 .fillMaxWidth()
                 .statusBarsPadding()
                 .padding(12.dp)
