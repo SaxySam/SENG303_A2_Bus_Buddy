@@ -45,7 +45,7 @@ fun HUD(player: Player, nextStop: BusStop, modifier: Modifier = Modifier) {
                 imageVector = Icons.Filled.MonetizationOn,
                 contentDescription = "Score",
                 tint = Color(0xFFFFD54F),
-                modifier = Modifier.size(28.dp)
+                modifier = Modifier.size(35.dp)
             )
             Spacer(Modifier.width(8.dp))
             Text(
@@ -62,11 +62,13 @@ fun HUD(player: Player, nextStop: BusStop, modifier: Modifier = Modifier) {
             ) {
                 Text(
                     text = nextStop.name,
+                    fontSize = 18.sp,
                     style = MaterialTheme.typography.titleMedium.copy(color = Color.White),
                     textAlign = TextAlign.End
                 )
                 Text(
                     text = "${nextStop.etaMinutes} mins",
+                    fontSize = 24.sp,
                     style = MaterialTheme.typography.titleMedium.copy(color = Color.White),
                     textAlign = TextAlign.End
                 )
