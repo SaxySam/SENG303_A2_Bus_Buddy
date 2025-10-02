@@ -22,6 +22,7 @@ class MainActivity : ComponentActivity() {
             BusBuddyTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     HomeScreen(modifier = Modifier.padding(innerPadding))
+                    // Navigation to be added later
                 }
             }
         }
