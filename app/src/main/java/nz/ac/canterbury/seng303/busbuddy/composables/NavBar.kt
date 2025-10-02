@@ -7,20 +7,16 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.EmojiEvents
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Map
-import androidx.compose.material3.Icon
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.NavigationBarItemDefaults
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import nz.ac.canterbury.seng303.busbuddy.ui.theme.*
 
 @Composable
 fun NavBar() {
-    var selectedItem by remember { mutableStateOf(1) } // Default "Home"
+    var selectedItem by remember { mutableStateOf(1) }
 
     val items = listOf(
         Triple(Icons.Filled.EmojiEvents, "Leaderboard", 0),
@@ -29,8 +25,8 @@ fun NavBar() {
     )
 
     NavigationBar(
-        containerColor = Color(0xFF4A90E2),
-        contentColor = Color.White,
+        containerColor = BlueGradientStart,
+        contentColor = MaterialTheme.colorScheme.onPrimary,
         tonalElevation = 12.dp
     ) {
         items.forEach { (icon, label, index) ->
@@ -46,11 +42,11 @@ fun NavBar() {
                 label = {
                     Text(
                         text = label,
-                        color = if (selectedItem == index) Color.White else Color.LightGray
+                        color = if (selectedItem == index) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
                     )
                 },
                 colors = NavigationBarItemDefaults.colors(
-                    indicatorColor = Color(0xFF50E3C2) // Highlight for selected item
+                    indicatorColor = BlueGradientEnd
                 )
             )
         }
@@ -63,7 +59,7 @@ fun PreviewNavBar() {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = Color.White)
+            .background(color = MaterialTheme.colorScheme.background)
     ) {
         NavBar()
     }
