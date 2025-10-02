@@ -9,11 +9,11 @@ import androidx.compose.ui.Modifier
 
 @Composable
 fun MainGameplay(modifier: Modifier = Modifier) {
+    val score = 30
+
     Box(modifier = modifier.fillMaxSize()) {
-        Road(
-            modifier = Modifier.fillMaxSize(),
-            imageResId = R.drawable.road
-        )
+        HUD(score = score)
+        Road(modifier = Modifier.fillMaxSize(), imageResId = R.drawable.road)
         Bus()
     }
 }
