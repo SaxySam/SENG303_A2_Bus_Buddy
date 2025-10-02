@@ -2,7 +2,6 @@ package nz.ac.canterbury.seng303.busbuddy.composables
 
 import Road
 import androidx.compose.foundation.layout.Box
-import nz.ac.canterbury.seng303.busbuddy.R
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
