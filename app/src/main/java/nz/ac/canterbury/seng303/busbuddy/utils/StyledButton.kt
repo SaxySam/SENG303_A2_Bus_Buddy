@@ -1,5 +1,7 @@
 package nz.ac.canterbury.seng303.busbuddy.utils
 
+import android.R.attr.onClick
+import android.R.attr.text
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -14,6 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -24,22 +28,23 @@ fun StyledButton(
     color: Color,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    shape: androidx.compose.foundation.shape.CornerBasedShape = RoundedCornerShape(16.dp)
+    shape: androidx.compose.foundation.shape.CornerBasedShape = RoundedCornerShape(16.dp),
+    verticalPadding: Dp = 20.dp,
+    fontSize: TextUnit = 16.sp
 ) {
     Button(
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(containerColor = color),
         shape = shape,
         modifier = modifier
-            .shadow(6.dp, shape)
-            .height(56.dp),
-        contentPadding = PaddingValues(horizontal = 12.dp)
+            .shadow(6.dp, shape),
+        contentPadding = PaddingValues(horizontal = 12.dp, vertical = verticalPadding)
     ) {
         icon()
         Spacer(modifier = Modifier.width(8.dp))
         Text(
             text = text,
-            fontSize = 16.sp,
+            fontSize = fontSize,
             fontWeight = FontWeight.SemiBold,
             color = MaterialTheme.colorScheme.onPrimary,
             maxLines = 1,

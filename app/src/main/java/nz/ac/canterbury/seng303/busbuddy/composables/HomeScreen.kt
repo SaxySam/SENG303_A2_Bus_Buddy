@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
 import nz.ac.canterbury.seng303.busbuddy.utils.SectionCard
 import nz.ac.canterbury.seng303.busbuddy.utils.StyledButton
@@ -71,11 +72,13 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                     Column(verticalArrangement = Arrangement.spacedBy(16.dp), modifier = Modifier.fillMaxWidth()) {
                         StyledButton(
                             text = "Join Game",
-                            icon = { Icon(Icons.Outlined.PlayArrow, contentDescription = null) },
+                            icon = { Icon(Icons.Outlined.PlayArrow, contentDescription = null, modifier = Modifier.size(35.dp)) },
                             color = MaterialTheme.colorScheme.primary,
                             onClick = { },
                             modifier = Modifier.fillMaxWidth(),
-                            shape = RoundedCornerShape(20.dp)
+                            shape = RoundedCornerShape(20.dp),
+                            verticalPadding = 35.dp,
+                            fontSize = 24.sp
                         )
 
                         StyledButton(
@@ -94,7 +97,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                         StyledButton(
                             text = "Bus Routes",
                             icon = { Icon(Icons.Filled.Map, contentDescription = null) },
-                            color = MaterialTheme.colorScheme.primaryContainer,
+                            color = MaterialTheme.colorScheme.tertiary,
                             onClick = { },
                             shape = RoundedCornerShape(20.dp),
                             modifier = Modifier.fillMaxWidth()
@@ -104,7 +107,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                             StyledButton(
                                 text = "Top up",
                                 icon = { Icon(Icons.AutoMirrored.Filled.OpenInNew, contentDescription = null) },
-                                color = MaterialTheme.colorScheme.tertiary,
+                                color = MaterialTheme.colorScheme.tertiaryContainer,
                                 onClick = {
                                     val intent = Intent(Intent.ACTION_VIEW)
                                     intent.data = "https://metrocard.metroinfo.co.nz/#/profile/topup".toUri()
