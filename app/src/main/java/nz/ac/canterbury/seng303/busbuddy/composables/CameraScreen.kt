@@ -50,11 +50,11 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
-import nz.ac.canterbury.seng303.assignmentone.R
-import nz.ac.canterbury.seng303.assignmentone.data.CameraState
-import nz.ac.canterbury.seng303.assignmentone.utils.bounceClick
-import nz.ac.canterbury.seng303.assignmentone.utils.rotateBitmap
-import nz.ac.canterbury.seng303.assignmentone.viewmodels.CameraViewModel
+import nz.ac.canterbury.seng303.busbuddy.R
+import nz.ac.canterbury.seng303.busbuddy.data.CameraState
+import nz.ac.canterbury.seng303.busbuddy.utils.bounceClick
+import nz.ac.canterbury.seng303.busbuddy.utils.rotateBitmap
+import nz.ac.canterbury.seng303.busbuddy.viewmodels.CameraViewModel
 import org.koin.androidx.compose.koinViewModel
 
 
@@ -101,8 +101,8 @@ fun CameraContent(onPhotoCaptured: (Bitmap) -> Unit, lastCapturedPhoto: Bitmap? 
         modifier = Modifier.fillMaxSize().background(Color.Black).padding(all = 8.dp),
         floatingActionButton = {
             ExtendedFloatingActionButton(
-                icon = { Icon(ImageVector.vectorResource(R.drawable.camera_shutter), contentDescription = "Camera capture icon") },
-                text = { Text(context.getString(R.string.TakePhoto)) },
+                icon = { Icon(ImageVector.vectorResource(R.drawable.ic_launcher_foreground), contentDescription = "Camera capture icon") },
+                text = { Text("Take Photo") },
                 onClick = { capturePhoto(context, cameraController, onPhotoCaptured) },
                 modifier = Modifier.bounceClick(),
             )
@@ -147,41 +147,11 @@ private fun capturePhoto(context: Context, cameraController: LifecycleCameraCont
             .toBitmap()
             .rotateBitmap(image.imageInfo.rotationDegrees)
 
-            //Ask if user wants to save
-            savePrompt(context, onPhotoCaptured, correctedBitmap)
-
             image.close()
         }
         override fun onError(exception: ImageCaptureException) {
             Log.e("CameraContent", "Error capturing image", exception) }
     })
-}
-
-
-private fun savePrompt(context: Context, onPhotoCaptured: (Bitmap) -> Unit, correctedBitmap: Bitmap) {
-    Toast.makeText(context, context.getString(R.string.PhotoTaken), Toast.LENGTH_SHORT).show()
-    val clearDataAlert = AlertDialog.Builder(context)
-    clearDataAlert
-        .setIcon((R.drawable.camera_shutter))
-        .setTitle(R.string.CapturedImage)
-//        .setView()
-        .setMessage(context.getString(R.string.SavePhotoPrompt))
-        .setCancelable(false)
-        .setPositiveButton(context.getString(R.string.SavePhoto)) { dialog, id ->
-            // Save Photo To Gallery
-            onPhotoCaptured(correctedBitmap)
-            Toast.makeText(
-                context,
-                context.getString(R.string.PhotoSaved),
-                Toast.LENGTH_SHORT
-            ).show()
-        }
-        .setNegativeButton(context.getString((R.string.Cancel))) { dialog, id ->
-            // Dismiss the dialog
-            dialog.dismiss()
-        }
-    val alert = clearDataAlert.create()
-    alert.show()
 }
 
 @Composable
