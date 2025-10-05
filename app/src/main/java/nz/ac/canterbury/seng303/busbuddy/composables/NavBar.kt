@@ -16,7 +16,7 @@ import nz.ac.canterbury.seng303.busbuddy.ui.theme.*
 
 @Composable
 fun NavBar() {
-    var selectedItem by remember { mutableStateOf(1) }
+    var selectedItem by remember { mutableIntStateOf(1) }
 
     val items = listOf(
         Triple(Icons.Filled.EmojiEvents, "Leaderboard", 0),
