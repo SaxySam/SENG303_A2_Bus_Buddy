@@ -21,6 +21,9 @@ fun MainGameplay(modifier: Modifier = Modifier) {
         Road(
             Modifier.fillMaxSize()
         )
+        Coin(
+            modifier = Modifier.fillMaxSize()
+        )
         Bus()
         HUD(
             player,
