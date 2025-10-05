@@ -1,7 +1,6 @@
 package nz.ac.canterbury.seng303.busbuddy.composables
 
 import android.Manifest
-import android.app.AlertDialog
 import android.content.Context
 import android.graphics.Bitmap
 import android.util.Log
@@ -22,11 +21,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -46,17 +48,19 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import nz.ac.canterbury.seng303.busbuddy.R
 import nz.ac.canterbury.seng303.busbuddy.data.CameraState
+import nz.ac.canterbury.seng303.busbuddy.utils.NoPermissionContent
+import nz.ac.canterbury.seng303.busbuddy.utils.RequestType
 import nz.ac.canterbury.seng303.busbuddy.utils.bounceClick
 import nz.ac.canterbury.seng303.busbuddy.utils.rotateBitmap
 import nz.ac.canterbury.seng303.busbuddy.viewmodels.CameraViewModel
 import org.koin.androidx.compose.koinViewModel
-
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
@@ -76,34 +80,41 @@ fun MainCameraContentActivity(hasCameraPermission: Boolean, onRequestCameraPermi
     if (hasCameraPermission) {
         CameraView()
     } else {
-        NoPermissionScreen(onRequestCameraPermission, RequestType.CAMERA)
+        NoPermissionContent(onRequestCameraPermission, RequestType.CAMERA)
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CameraView(viewModel: CameraViewModel = koinViewModel()) {
     val cameraState: CameraState by viewModel.state.collectAsStateWithLifecycle()
 
-    CameraContent(
-        onPhotoCaptured = viewModel::storePhotoInGallery,
-        lastCapturedPhoto = cameraState.capturedImage
-    )
-}
-
-@Composable
-fun CameraContent(onPhotoCaptured: (Bitmap) -> Unit, lastCapturedPhoto: Bitmap? = null) {
-
     val context = LocalContext.current
+    val navController = rememberNavController()
     val lifeCycleOwner: LifecycleOwner = LocalLifecycleOwner.current
     val cameraController = remember { LifecycleCameraController(context) }
 
     Scaffold(
-        modifier = Modifier.fillMaxSize().background(Color.Black).padding(all = 8.dp),
+        topBar = {
+            TopAppBar(
+                title = { Text("Scan QR") },
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(R.drawable.ic_launcher_foreground),
+                            contentDescription = "Back",
+                        )
+                    }
+                }
+            )
+        },
+        bottomBar = { NavBar() },
+        modifier = Modifier.fillMaxSize(),
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 icon = { Icon(ImageVector.vectorResource(R.drawable.ic_launcher_foreground), contentDescription = "Camera capture icon") },
                 text = { Text("Take Photo") },
-                onClick = { capturePhoto(context, cameraController, onPhotoCaptured) },
+                onClick = { Toast.makeText(context, "Sent Toast", Toast.LENGTH_SHORT).show() },
                 modifier = Modifier.bounceClick(),
             )
         }
@@ -125,65 +136,13 @@ fun CameraContent(onPhotoCaptured: (Bitmap) -> Unit, lastCapturedPhoto: Bitmap? 
                     }
                 }
             )
-
-            if (lastCapturedPhoto != null) {
-                LastPhotoPreview(
-                    modifier = Modifier.align(BottomStart),
-                    lastCapturedPhoto = lastCapturedPhoto
-                )
-            }
         }
     }
 }
-
-private fun capturePhoto(context: Context, cameraController: LifecycleCameraController, onPhotoCaptured: (Bitmap) -> Unit) {
-
-    val mainExecutor = ContextCompat.getMainExecutor(context)
-
-    cameraController.takePicture(mainExecutor, object : ImageCapture.OnImageCapturedCallback() {
-        override fun onCaptureSuccess(image: ImageProxy) {
-            //Save Image
-            val correctedBitmap: Bitmap = image
-            .toBitmap()
-            .rotateBitmap(image.imageInfo.rotationDegrees)
-
-            image.close()
-        }
-        override fun onError(exception: ImageCaptureException) {
-            Log.e("CameraContent", "Error capturing image", exception) }
-    })
-}
-
-@Composable
-private fun LastPhotoPreview(
-    modifier: Modifier = Modifier,
-    lastCapturedPhoto: Bitmap
-) {
-    val capturedPhoto: ImageBitmap = remember(lastCapturedPhoto.hashCode()) { lastCapturedPhoto.asImageBitmap() }
-
-    Card(
-        modifier = modifier
-            .size(192.dp)
-            .padding(16.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-        shape = MaterialTheme.shapes.extraLarge
-    ) {
-        Image(
-            bitmap = capturedPhoto,
-            contentDescription = "Last captured photo",
-            contentScale = ContentScale.Crop
-        )
-        Text("Test")
-    }
-}
-
-
 
 @Preview
 @Composable
 private fun Preview_CameraContent() {
-    CameraContent(
-        onPhotoCaptured = {}
-    )
+    CameraView(koinViewModel())
 }
 

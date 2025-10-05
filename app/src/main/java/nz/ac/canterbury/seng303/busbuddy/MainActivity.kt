@@ -5,10 +5,16 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import nz.ac.canterbury.seng303.busbuddy.composables.HomeScreen
 import nz.ac.canterbury.seng303.busbuddy.composables.CameraScreen
 import nz.ac.canterbury.seng303.busbuddy.ui.theme.BusBuddyTheme
 
@@ -17,15 +23,22 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            BusBuddyTheme {
-                //Testing Camera View
-                CameraScreen()
+            val context = LocalContext.current
+            BusBuddyTheme() {
+                val navController = rememberNavController()
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    // Navigation to be added later
+                    NavHost(navController = navController, startDestination = "HomeScreen") {
+                        composable("HomeScreen") {
+                            HomeScreen(modifier = Modifier.padding(innerPadding))
+                        }
+                        composable("CameraScreen") {
+                            CameraScreen()
+                        }
 
-//                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-//                    // Navigation to be added later
-//                    HomeScreen(modifier = Modifier.padding(innerPadding))
+                    }
                 }
             }
         }
     }
-//}
+}

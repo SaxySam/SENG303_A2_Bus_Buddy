@@ -22,7 +22,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
 import nz.ac.canterbury.seng303.busbuddy.utils.SectionCard
+import nz.ac.canterbury.seng303.busbuddy.utils.ShowToast
 import nz.ac.canterbury.seng303.busbuddy.utils.StyledButton
+import nz.ac.canterbury.seng303.busbuddy.utils.bounceClick
+import nz.ac.canterbury.seng303.busbuddy.utils.openURL
 
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier) {
@@ -52,6 +55,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                     .padding(16.dp)
                     .shadow(8.dp, RoundedCornerShape(50))
                     .background(MaterialTheme.colorScheme.background, RoundedCornerShape(50))
+                    .bounceClick()
             ) {
                 Icon(
                     imageVector = Icons.Filled.AccountBox,
@@ -75,7 +79,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                             icon = { Icon(Icons.Outlined.PlayArrow, contentDescription = null, modifier = Modifier.size(35.dp)) },
                             color = MaterialTheme.colorScheme.primary,
                             onClick = { },
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier = Modifier.fillMaxWidth().bounceClick(),
                             shape = RoundedCornerShape(20.dp),
                             verticalPadding = 35.dp,
                             fontSize = 24.sp
@@ -86,7 +90,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                             icon = { Icon(Icons.Filled.EmojiEvents, contentDescription = null) },
                             color = MaterialTheme.colorScheme.secondary,
                             onClick = { },
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier = Modifier.fillMaxWidth().bounceClick(),
                             shape = RoundedCornerShape(20.dp)
                         )
                     }
@@ -100,7 +104,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                             color = MaterialTheme.colorScheme.tertiary,
                             onClick = { },
                             shape = RoundedCornerShape(20.dp),
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier.fillMaxWidth().bounceClick()
                         )
 
                         Row(horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth()) {
@@ -109,11 +113,9 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                                 icon = { Icon(Icons.AutoMirrored.Filled.OpenInNew, contentDescription = null) },
                                 color = MaterialTheme.colorScheme.tertiaryContainer,
                                 onClick = {
-                                    val intent = Intent(Intent.ACTION_VIEW)
-                                    intent.data = "https://metrocard.metroinfo.co.nz/#/profile/topup".toUri()
-                                    context.startActivity(intent)
+                                    openURL(context, "https://metrocard.metroinfo.co.nz/#/profile/topup", ShowToast.HIDE)
                                 },
-                                modifier = Modifier.weight(1f),
+                                modifier = Modifier.weight(1f).bounceClick(),
                                 shape = RoundedCornerShape(20.dp)
                             )
                             StyledButton(
@@ -121,11 +123,9 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                                 icon = { Icon(Icons.AutoMirrored.Filled.OpenInNew, contentDescription = null) },
                                 color = MaterialTheme.colorScheme.tertiaryContainer,
                                 onClick = {
-                                    val intent = Intent(Intent.ACTION_VIEW)
-                                    intent.data = "https://go.metroinfo.co.nz/mtbp/en-gb/journey-planner/content/favorites".toUri()
-                                    context.startActivity(intent)
+                                    openURL(context, "https://go.metroinfo.co.nz/mtbp/en-gb/journey-planner/content/favorites", ShowToast.HIDE)
                                 },
-                                modifier = Modifier.weight(1f),
+                                modifier = Modifier.weight(1f).bounceClick(),
                                 shape = RoundedCornerShape(20.dp)
                             )
                         }
