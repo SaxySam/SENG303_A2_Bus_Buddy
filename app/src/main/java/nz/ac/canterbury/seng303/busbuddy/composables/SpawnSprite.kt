@@ -35,27 +35,27 @@ fun SpawnSprite(
     var widthPx by remember { mutableFloatStateOf(0f) }
     var heightPx by remember { mutableFloatStateOf(0f) }
 
-    // Pick a random X location
+    // Random X location
     val xPxState = remember(widthPx) {
         val x = if (widthPx <= sizePx) 0f
         else Random.nextFloat() * (widthPx - sizePx)
         mutableStateOf(x)
     }
-    val xPx = xPxState.value
 
-    // Animate Y, matching the road
-    val distance = if (heightPx <= 0f) 1f else heightPx
+    // Traveling down animation
+    val xPx = xPxState.value
+    val startY = -startAboveRatio * heightPx - sizePx
+    val travelPx = if (heightPx <= 0f) 1f else (heightPx - startY + 1f)
     val phaseY by rememberInfiniteTransition().animateFloat(
         initialValue = 0f,
-        targetValue = distance,
+        targetValue = travelPx,
         animationSpec = infiniteRepeatable(
             tween(
-                durationMillis = ((distance / pixelsPerSecond) * 1000f).toInt().coerceAtLeast(1),
+                durationMillis = ((travelPx / pixelsPerSecond) * 1000f).toInt().coerceAtLeast(1),
                 easing = LinearEasing
             )
         )
     )
-    val startY = -startAboveRatio * heightPx - sizePx
 
     Box(
         modifier = modifier
