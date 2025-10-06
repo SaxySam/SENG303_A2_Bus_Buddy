@@ -1,6 +1,7 @@
 package nz.ac.canterbury.seng303.busbuddy.composables
 
 import Road
+import SpawnSprite
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import nz.ac.canterbury.seng303.busbuddy.R
 import nz.ac.canterbury.seng303.busbuddy.models.BusStop
 import nz.ac.canterbury.seng303.busbuddy.models.Player
 
@@ -21,8 +23,9 @@ fun MainGameplay(modifier: Modifier = Modifier) {
         Road(
             Modifier.fillMaxSize()
         )
-        Coin(
-            modifier = Modifier.fillMaxSize()
+        SpawnSprite(
+            modifier = Modifier.fillMaxSize(),
+            sprite = R.drawable.coin
         )
         Bus()
         HUD(
