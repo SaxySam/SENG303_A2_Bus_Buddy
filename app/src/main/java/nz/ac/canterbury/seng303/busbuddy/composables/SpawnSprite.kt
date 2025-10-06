@@ -1,3 +1,5 @@
+package nz.ac.canterbury.seng303.busbuddy.composables
+
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
@@ -5,30 +7,32 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlin.random.Random
 
 @Composable
 fun SpawnSprite(
+    id: Long,
     sprite: Int,
     modifier: Modifier = Modifier,
     sizeDp: Int = 55,
     pixelsPerSecond: Float = 1000f,
     startAboveRatio: Float = 0.2f,
-) {
+    onBoundsChanged: (Long, Rect) -> Unit = { _, _ -> }
+    ) {
     val density = LocalDensity.current
     val sizePx = with(density) { sizeDp.dp.toPx() }
     var widthPx by remember { mutableFloatStateOf(0f) }
@@ -54,6 +58,14 @@ fun SpawnSprite(
                 animationSpec = tween(durationMillis = duration, easing = LinearEasing)
             )
         }
+    }
+
+    // For collision detection with bus
+    LaunchedEffect(id, xPx, startY, sizePx) {
+        snapshotFlow { yAnim.value }
+            .map { y -> Rect(Offset(xPx, startY + y), Size(sizePx, sizePx)) }
+            .distinctUntilChanged()
+            .collectLatest { rect -> onBoundsChanged(id, rect) }
     }
 
     Box(
