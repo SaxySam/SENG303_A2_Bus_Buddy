@@ -1,7 +1,6 @@
 package nz.ac.canterbury.seng303.busbuddy.composables
 
 import Road
-import SpawnSprite
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,6 +11,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -30,6 +30,7 @@ fun MainGameplay(modifier: Modifier = Modifier) {
     val player = Player("John", 30)
     val nextStop = BusStop("Northlands Mall",4)
     val sprites = remember { mutableStateListOf<Sprite>() }
+    val spriteRects = remember { mutableStateMapOf<Long, Rect>() }
     var busRect by remember { mutableStateOf<Rect?>(null) }
 
     // Main game loop
@@ -43,6 +44,11 @@ fun MainGameplay(modifier: Modifier = Modifier) {
         }
     }
 
+    fun handleCollision(spriteId: Long) {
+        System.out.println("Collision with sprite $spriteId")
+        // TODO: end game/ update coin value
+    }
+
     Box(modifier.fillMaxSize()) {
         Road(
             Modifier.fillMaxSize()
@@ -51,9 +57,16 @@ fun MainGameplay(modifier: Modifier = Modifier) {
         sprites.forEach { s ->
             key(s.id) {
                 SpawnSprite(
-                    modifier = Modifier.fillMaxSize(),
+                    id = s.id,
                     sprite = s.type.resId,
-                    sizeDp = s.type.defaultSizeDp
+                    sizeDp = s.type.defaultSizeDp,
+                    modifier = Modifier.fillMaxSize(),
+                    onBoundsChanged = { id, rect ->
+                        spriteRects[id] = rect
+                        busRect?.let { bus ->
+                            if (rect.overlaps(bus)) handleCollision(id)
+                        }
+                    }
                 )
             }
         }

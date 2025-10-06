@@ -9,8 +9,8 @@ enum class SpriteType(
 ) {
     Coin(R.drawable.coin, 55),
     Cone(R.drawable.cone, 80),
-    Stop(R.drawable.stop, 100),
-    Car(R.drawable.car, 100);
+    Stop(R.drawable.stop, 70),
+    Car(R.drawable.car, 110);
 
     companion object {
         val Sprites:List<SpriteType> = listOf(Coin, Coin, Coin, Coin, Coin, Cone, Stop, Car)
