@@ -1,6 +1,5 @@
 package nz.ac.canterbury.seng303.busbuddy
 
-import android.graphics.Camera
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -9,6 +8,10 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -34,6 +37,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             val context = LocalContext.current
+            var darkTheme by remember {mutableStateOf(false)}
             val barcodeScanner = BarcodeScanner(context)
             BusBuddyTheme() {
                 val navController = rememberNavController()
@@ -42,22 +46,29 @@ class MainActivity : ComponentActivity() {
                     val barcodeResults = barcodeScanner.barCodeResults.collectAsStateWithLifecycle()
 
                     // Navigation to be added later
-                    NavHost(navController = navController, startDestination = "QRCodeScanner") {
+                    NavHost(navController = navController, startDestination = "HomeScreen") {
                         composable("HomeScreen") {
-                            HomeScreen(modifier = Modifier.padding(innerPadding))
-                        }
-                        composable("CameraScreen") {
-                            CameraScreen()
+                            HomeScreen(navController, darkTheme = darkTheme, onThemeUpdated = {darkTheme = !darkTheme},  Modifier.padding(innerPadding))
                         }
                         composable("JoinLobbyScreen") {
-                            JoinLobby(joinLobbyViewModel)
+                            JoinLobby(navController, joinLobbyViewModel, barcodeScanner::startScan, barcodeResults.value)
                         }
                         composable("QRCodeScanner") {
-                            ScanBarcode(barcodeScanner::startScan, barcodeResults.value)
+                            ScanBarcode(navController, barcodeScanner::startScan, barcodeResults.value)
                         }
+                        /**TODO
+                        composable("LeaderBoard") {
+                            // LeaderBoardScreen()
+                        }
+                        composable("BusRoutes") {
+                            // BusRoutesScreen()
+                        }
+                         */
                     }
                 }
             }
         }
     }
 }
+
+// https://trello.com/b/qkzuaFiH/seng303-kanban
