@@ -1,13 +1,12 @@
+import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -28,34 +27,34 @@ fun SpawnSprite(
     modifier: Modifier = Modifier,
     sizeDp: Int = 55,
     pixelsPerSecond: Float = 1000f,
-    startAboveRatio: Float = 0.2f
+    startAboveRatio: Float = 0.2f,
 ) {
     val density = LocalDensity.current
     val sizePx = with(density) { sizeDp.dp.toPx() }
     var widthPx by remember { mutableFloatStateOf(0f) }
     var heightPx by remember { mutableFloatStateOf(0f) }
 
-    // Random X location
+    // Pick a random X
     val xPxState = remember(widthPx) {
-        val x = if (widthPx <= sizePx) 0f
-        else Random.nextFloat() * (widthPx - sizePx)
+        val x = if (widthPx <= sizePx) 0f else Random.nextFloat() * (widthPx - sizePx)
         mutableStateOf(x)
     }
-
-    // Traveling down animation
     val xPx = xPxState.value
+
+    // sprite animation
+    val yAnim = remember { Animatable(0f) }
     val startY = -startAboveRatio * heightPx - sizePx
     val travelPx = if (heightPx <= 0f) 1f else (heightPx - startY + 1f)
-    val phaseY by rememberInfiniteTransition().animateFloat(
-        initialValue = 0f,
-        targetValue = travelPx,
-        animationSpec = infiniteRepeatable(
-            tween(
-                durationMillis = ((travelPx / pixelsPerSecond) * 1000f).toInt().coerceAtLeast(1),
-                easing = LinearEasing
+    LaunchedEffect(heightPx, sizePx, pixelsPerSecond) {
+        if (heightPx > 0f) {
+            yAnim.snapTo(0f)
+            val duration = ((travelPx / pixelsPerSecond) * 1000f).toInt().coerceAtLeast(1)
+            yAnim.animateTo(
+                targetValue = travelPx,
+                animationSpec = tween(durationMillis = duration, easing = LinearEasing)
             )
-        )
-    )
+        }
+    }
 
     Box(
         modifier = modifier
@@ -69,12 +68,12 @@ fun SpawnSprite(
         if (widthPx > 0f && heightPx > 0f) {
             Image(
                 painter = painterResource(sprite),
-                contentDescription = "Coin",
+                contentDescription = "Falling sprite",
                 modifier = Modifier
                     .size(sizeDp.dp)
                     .graphicsLayer {
                         translationX = xPx
-                        translationY = startY + phaseY
+                        translationY = startY + yAnim.value
                     }
             )
         }
