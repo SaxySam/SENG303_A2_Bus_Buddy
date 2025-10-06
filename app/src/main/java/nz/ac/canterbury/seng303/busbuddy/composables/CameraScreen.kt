@@ -43,6 +43,7 @@ import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import nz.ac.canterbury.seng303.busbuddy.R
 import nz.ac.canterbury.seng303.busbuddy.data.CameraState
+import nz.ac.canterbury.seng303.busbuddy.utils.BarcodeScanner
 import nz.ac.canterbury.seng303.busbuddy.utils.NoPermissionContent
 import nz.ac.canterbury.seng303.busbuddy.utils.RequestType
 import nz.ac.canterbury.seng303.busbuddy.utils.bounceClick
@@ -80,6 +81,7 @@ fun CameraView(viewModel: CameraViewModel = koinViewModel()) {
     val navController = rememberNavController()
     val lifeCycleOwner: LifecycleOwner = LocalLifecycleOwner.current
     val cameraController = remember { LifecycleCameraController(context) }
+    val barcodeScanner = BarcodeScanner(context)
 
     Scaffold(
         topBar = {
@@ -100,7 +102,7 @@ fun CameraView(viewModel: CameraViewModel = koinViewModel()) {
             ExtendedFloatingActionButton(
                 icon = { Icon(ImageVector.vectorResource(R.drawable.ic_launcher_foreground), contentDescription = "Camera capture icon") },
                 text = { Text("Join Lobby") },
-                onClick = { Toast.makeText(context, "Sent Toast", Toast.LENGTH_SHORT).show() },
+                onClick = { Toast.makeText(context, "Sent Toast", Toast.LENGTH_SHORT).show(); barcodeScanner::startScan },
                 modifier = Modifier.bounceClick()) },
         floatingActionButtonPosition = FabPosition.Center,
         bottomBar = { NavBar() }
