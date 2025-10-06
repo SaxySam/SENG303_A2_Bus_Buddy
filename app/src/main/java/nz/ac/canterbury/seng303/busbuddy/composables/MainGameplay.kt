@@ -32,8 +32,8 @@ fun MainGameplay(modifier: Modifier = Modifier) {
         while (true) {
             val type = Sprites.random(random = Random)
             sprites += Sprite(id = System.nanoTime(), type = type)
-            if (sprites.size > 5) sprites.removeAt(0)
-            delay(1000L)
+            if (sprites.size > 10) sprites.removeAt(0)
+            delay(700L)
         }
     }
 

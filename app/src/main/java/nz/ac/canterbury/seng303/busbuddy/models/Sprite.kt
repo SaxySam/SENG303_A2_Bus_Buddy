@@ -9,10 +9,12 @@ enum class SpriteType(
         val defaultSizeDp: Int = 55
 ) {
     Coin(R.drawable.coin, 55),
-    Cone(R.drawable.cone, 100);
+    Cone(R.drawable.cone, 80),
+    Stop(R.drawable.stop, 100),
+    Car(R.drawable.car, 100);
 
     companion object {
-        val Sprites:List<SpriteType> = listOf(Coin, Cone)
+        val Sprites:List<SpriteType> = listOf(Coin, Coin, Coin, Coin, Coin, Cone, Stop, Car)
     }
 }
 
