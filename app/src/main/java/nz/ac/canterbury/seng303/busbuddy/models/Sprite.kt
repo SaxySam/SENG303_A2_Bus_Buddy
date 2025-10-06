@@ -1,7 +1,6 @@
 package nz.ac.canterbury.seng303.busbuddy.models;
 
 import androidx.annotation.DrawableRes
-
 import nz.ac.canterbury.seng303.busbuddy.R
 
 enum class SpriteType(
