@@ -11,12 +11,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import nz.ac.canterbury.seng303.busbuddy.composables.HomeScreen
 import nz.ac.canterbury.seng303.busbuddy.composables.CameraScreen
+import nz.ac.canterbury.seng303.busbuddy.composables.JoinLobby
 import nz.ac.canterbury.seng303.busbuddy.ui.theme.BusBuddyTheme
+import nz.ac.canterbury.seng303.busbuddy.viewmodels.JoinLobbyViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,6 +30,7 @@ class MainActivity : ComponentActivity() {
             BusBuddyTheme() {
                 val navController = rememberNavController()
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    val joinLobbyViewModel: JoinLobbyViewModel = viewModel()
                     // Navigation to be added later
                     NavHost(navController = navController, startDestination = "HomeScreen") {
                         composable("HomeScreen") {
@@ -35,7 +39,9 @@ class MainActivity : ComponentActivity() {
                         composable("CameraScreen") {
                             CameraScreen()
                         }
-
+                        composable("JoinLobbyScreen") {
+                            JoinLobby(joinLobbyViewModel)
+                        }
                     }
                 }
             }
