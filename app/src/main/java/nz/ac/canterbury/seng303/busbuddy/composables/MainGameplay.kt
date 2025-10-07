@@ -28,9 +28,10 @@ import kotlin.random.Random
 
 @Composable
 fun MainGameplay(modifier: Modifier = Modifier) {
+    var backgroundSFX = 0
     val player = Player("John", 30)
     val nextStop = BusStop("Northlands Mall",4)
-    val (soundPool, coin, crash) = rememberSoundPool()
+    val (soundPool, coin, crash, gameOver, background) = rememberSoundPool()
     val sprites = remember { mutableStateListOf<Sprite>() }
     val spriteRects = remember { mutableStateMapOf<Long, Rect>() }
     var busRect by remember { mutableStateOf<Rect?>(null) }
@@ -38,6 +39,7 @@ fun MainGameplay(modifier: Modifier = Modifier) {
     // Main game loop
     LaunchedEffect(Sprites) {
         while (true) {
+            backgroundSFX = soundPool.play(background, 0.7f, 0.7f, 1, -1, 1f)
             // Select random object to blit
             val type = Sprites.random(random = Random)
             sprites += Sprite(id = System.nanoTime(), type = type)
@@ -53,7 +55,9 @@ fun MainGameplay(modifier: Modifier = Modifier) {
             soundPool.play(coin, 1f, 1f, 1, 0, 1f)
         } else {
             //todo: handle game over
+            soundPool.stop(backgroundSFX)
             soundPool.play(crash, 1f, 1f, 1, 0, 1f)
+            soundPool.play(gameOver, 1f, 1f, 1, 0, 1f)
         }
         sprites.remove(sprite)
         spriteRects.remove(spriteId)
