@@ -12,10 +12,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import nz.ac.canterbury.seng303.busbuddy.ui.theme.*
+import nz.ac.canterbury.seng303.busbuddy.utils.bounceClick
 
 @Composable
-fun NavBar() {
+fun NavBar(navController: NavController) {
     var selectedItem by remember { mutableIntStateOf(1) }
 
     val items = listOf(
@@ -31,8 +34,17 @@ fun NavBar() {
     ) {
         items.forEach { (icon, label, index) ->
             NavigationBarItem(
+                modifier = Modifier
+                .bounceClick(),
                 selected = selectedItem == index,
-                onClick = { selectedItem = index },
+                onClick = {
+                    selectedItem = index
+                    when (selectedItem) {
+                        // TODO
+                        0 -> { navController.navigate("LeaderBoard") }
+                        1 -> { navController.navigate("HomeScreen") }
+                        2 -> { navController.navigate("BusRoutes") }
+                    } },
                 icon = {
                     Icon(
                         imageVector = icon,
@@ -61,6 +73,6 @@ fun PreviewNavBar() {
             .fillMaxSize()
             .background(color = MaterialTheme.colorScheme.background)
     ) {
-        NavBar()
+        NavBar(navController = rememberNavController())
     }
 }

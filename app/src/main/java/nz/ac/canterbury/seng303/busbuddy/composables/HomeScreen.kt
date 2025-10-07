@@ -21,18 +21,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import nz.ac.canterbury.seng303.busbuddy.utils.SectionCard
 import nz.ac.canterbury.seng303.busbuddy.utils.ShowToast
 import nz.ac.canterbury.seng303.busbuddy.utils.StyledButton
+import nz.ac.canterbury.seng303.busbuddy.utils.ThemeSwitcher
 import nz.ac.canterbury.seng303.busbuddy.utils.bounceClick
 import nz.ac.canterbury.seng303.busbuddy.utils.openURL
 
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
+fun HomeScreen(navController: NavController, darkTheme: Boolean, onThemeUpdated: () -> Unit, modifier: Modifier = Modifier) {
     val context = LocalContext.current
 
     Scaffold(
-        bottomBar = { NavBar() },
+        bottomBar = { NavBar(navController) },
         modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
         Box(
@@ -48,6 +51,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                     )
                 )
         ) {
+            // Profile Button
             IconButton(
                 onClick = { },
                 modifier = Modifier
@@ -74,23 +78,25 @@ fun HomeScreen(modifier: Modifier = Modifier) {
             ) {
                 SectionCard(title = "Game") {
                     Column(verticalArrangement = Arrangement.spacedBy(16.dp), modifier = Modifier.fillMaxWidth()) {
+                        // Join Game Button
                         StyledButton(
                             text = "Join Game",
                             icon = { Icon(Icons.Outlined.PlayArrow, contentDescription = null, modifier = Modifier.size(35.dp)) },
                             color = MaterialTheme.colorScheme.primary,
-                            onClick = { },
-                            modifier = Modifier.fillMaxWidth().bounceClick(),
+                            onClick = { navController.navigate("JoinLobbyScreen") },
+                            modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(20.dp),
                             verticalPadding = 35.dp,
                             fontSize = 24.sp
                         )
 
+                        // Leaderboard Button
                         StyledButton(
                             text = "Leaderboard",
                             icon = { Icon(Icons.Filled.EmojiEvents, contentDescription = null) },
                             color = MaterialTheme.colorScheme.secondary,
                             onClick = { },
-                            modifier = Modifier.fillMaxWidth().bounceClick(),
+                            modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(20.dp)
                         )
                     }
@@ -98,16 +104,18 @@ fun HomeScreen(modifier: Modifier = Modifier) {
 
                 SectionCard(title = "Bus") {
                     Column(verticalArrangement = Arrangement.spacedBy(16.dp), modifier = Modifier.fillMaxWidth()) {
+                        // Bus Routes Button
                         StyledButton(
                             text = "Bus Routes",
                             icon = { Icon(Icons.Filled.Map, contentDescription = null) },
                             color = MaterialTheme.colorScheme.tertiary,
                             onClick = { },
                             shape = RoundedCornerShape(20.dp),
-                            modifier = Modifier.fillMaxWidth().bounceClick()
+                            modifier = Modifier.fillMaxWidth()
                         )
 
                         Row(horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth()) {
+                            // Card Top-Up Button
                             StyledButton(
                                 text = "Top up",
                                 icon = { Icon(Icons.AutoMirrored.Filled.OpenInNew, contentDescription = null) },
@@ -115,9 +123,10 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                                 onClick = {
                                     openURL(context, "https://metrocard.metroinfo.co.nz/#/profile/topup", ShowToast.HIDE)
                                 },
-                                modifier = Modifier.weight(1f).bounceClick(),
+                                modifier = Modifier.weight(1f),
                                 shape = RoundedCornerShape(20.dp)
                             )
+                            // Metro Updates Button
                             StyledButton(
                                 text = "Updates",
                                 icon = { Icon(Icons.AutoMirrored.Filled.OpenInNew, contentDescription = null) },
@@ -125,7 +134,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                                 onClick = {
                                     openURL(context, "https://go.metroinfo.co.nz/mtbp/en-gb/journey-planner/content/favorites", ShowToast.HIDE)
                                 },
-                                modifier = Modifier.weight(1f).bounceClick(),
+                                modifier = Modifier.weight(1f),
                                 shape = RoundedCornerShape(20.dp)
                             )
                         }
@@ -133,11 +142,15 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                 }
             }
         }
+
+        // Dark Mode Button
+        ThemeSwitcher(darkTheme = darkTheme, onClick = onThemeUpdated, 0.9f, 0.65f, 0.6f)
     }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun PreviewHomeScreen() {
-    HomeScreen()
+    var darkTheme = false
+    HomeScreen(navController = rememberNavController(), darkTheme = darkTheme, onThemeUpdated = {darkTheme = !darkTheme})
 }
