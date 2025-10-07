@@ -32,7 +32,6 @@ fun MainGameplay(
     navController: NavController,
     modifier: Modifier = Modifier
 ) {
-    var backgroundSFX = 0
     val player = Player("John", 30)
     val nextStop = BusStop("Northlands Mall",4)
     val (soundPool, coin, crash, gameOver, background) = rememberSoundPool()
@@ -40,11 +39,11 @@ fun MainGameplay(
     val spriteRects = remember { mutableStateMapOf<Long, Rect>() }
     var busRect by remember { mutableStateOf<Rect?>(null) }
     var isRunning by remember { mutableStateOf(true) }
+    var bgStreamId by remember { mutableStateOf(0) }
 
     // Main game loop
     LaunchedEffect(Sprites) {
         while (isRunning) {
-            backgroundSFX = soundPool.play(background, 0.7f, 0.7f, 1, -1, 1f)
             // Select random object to blit
             val type = Sprites.random(random = Random)
             sprites += Sprite(id = System.nanoTime(), type = type)
@@ -53,27 +52,37 @@ fun MainGameplay(
         }
     }
 
+    // background music
+    LaunchedEffect(background) {
+        var stream = 0
+        while (stream == 0) {
+            stream = soundPool.play(background, 1f, 1f, 1, -1, 1f)
+            if (stream == 0) delay(50)
+        }
+        bgStreamId = stream
+    }
+
     fun handleCollision(spriteId: Long) {
         val sprite = sprites.firstOrNull { it.id == spriteId } ?: return
         if (sprite.type == SpriteType.Coin) {
             //todo: update current score value
-            soundPool.play(coin, 1f, 1f, 1, 0, 1f)
+            soundPool.play(coin, 0.5f, 0.5f, 1, 0, 1f)
         } else {
-            //todo: handle game over
-//            isRunning = false
-            soundPool.stop(backgroundSFX)
-            soundPool.play(crash, 1f, 1f, 1, 0, 1f)
-            soundPool.play(gameOver, 1f, 1f, 1, 0, 1f)
+            //todo: handle game over: (set isRunning = false then navigate to a game over composable)
+            if (bgStreamId != 0) {
+                soundPool.stop(bgStreamId)
+                bgStreamId = 0
+            }
+            soundPool.play(crash, 0.8f, 0.8f, 1, 0, 1f)
+            soundPool.play(gameOver, 0.8f, 0.8f, 1, 0, 1f)
         }
         sprites.remove(sprite)
         spriteRects.remove(spriteId)
     }
 
+    // load compatibles
     Box(modifier.fillMaxSize()) {
-        Road(
-            Modifier.fillMaxSize()
-        )
-
+        Road(Modifier.fillMaxSize())
         sprites.forEach { s ->
             key(s.id) {
                 SpawnSprite(
@@ -90,7 +99,6 @@ fun MainGameplay(
                 )
             }
         }
-
         Bus(onBoundsChanged = { rect -> busRect = rect })
         HUD(
             player,
