@@ -17,7 +17,7 @@ import androidx.compose.ui.res.vectorResource
 import nz.ac.canterbury.seng303.busbuddy.R
 
 @Composable
-fun ThemeSwitcher(darkTheme: Boolean = false, onClick: () -> Unit, horizontalBias: Float = 0.85f, verticalBias: Float = 0.9f) {
+fun ThemeSwitcher(darkTheme: Boolean = false, onClick: () -> Unit, horizontalBias: Float = 0.85f, verticalBias: Float = 0.9f, buttonScale: Float = 1.25f) {
     val context = LocalContext.current
     Box(modifier = Modifier.fillMaxSize()) {
         FloatingActionButton(
@@ -28,14 +28,14 @@ fun ThemeSwitcher(darkTheme: Boolean = false, onClick: () -> Unit, horizontalBia
         ) {
             if (darkTheme) {
                 Icon(
-                    imageVector = ImageVector.vectorResource(R.drawable.ic_launcher_foreground),
-                    modifier = Modifier.scale(1.25f),
+                    imageVector = ImageVector.vectorResource(R.drawable.night_moon),
+                    modifier = Modifier.scale(buttonScale),
                     contentDescription = "NightMode")
 
             } else {
                 Icon(
-                    imageVector = ImageVector.vectorResource(R.drawable.ic_launcher_foreground),
-                    modifier = Modifier.scale(1.25f),
+                    imageVector = ImageVector.vectorResource(R.drawable.day_sun),
+                    modifier = Modifier.scale(buttonScale),
                     contentDescription = "DayMode")
             }
         }

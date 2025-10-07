@@ -16,6 +16,7 @@ import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.outlined.CameraAlt
 import androidx.compose.material.icons.outlined.DirectionsBusFilled
+import androidx.compose.material.icons.outlined.PlayArrow
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -25,23 +26,32 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import kotlinx.coroutines.launch
 import nz.ac.canterbury.seng303.busbuddy.ui.theme.BusRoute1
 import nz.ac.canterbury.seng303.busbuddy.ui.theme.BusRoute3
 import nz.ac.canterbury.seng303.busbuddy.ui.theme.BusRoute5
 import nz.ac.canterbury.seng303.busbuddy.ui.theme.BusRoute7
 import nz.ac.canterbury.seng303.busbuddy.ui.theme.BusRoute8
 import nz.ac.canterbury.seng303.busbuddy.ui.theme.BusRouteOrbiter
+import nz.ac.canterbury.seng303.busbuddy.utils.BarcodeScanner
 import nz.ac.canterbury.seng303.busbuddy.utils.StyledButton
 import nz.ac.canterbury.seng303.busbuddy.utils.bounceClick
 import nz.ac.canterbury.seng303.busbuddy.viewmodels.JoinLobbyViewModel
@@ -50,11 +60,15 @@ import nz.ac.canterbury.seng303.busbuddy.viewmodels.JoinLobbyViewModel
 @Composable
 fun JoinLobby(
     navController: NavController,
-    joinLobbyViewModel: JoinLobbyViewModel
+    joinLobbyViewModel: JoinLobbyViewModel,
+    onScanBarcode: suspend() -> Unit,
+    barcodeValue: String?
 ) {
 
+    val scope = rememberCoroutineScope()
+
     Scaffold(
-        bottomBar = { NavBar() }
+        bottomBar = { NavBar(navController) }
     ) { innerPadding ->
         Box(
             modifier = Modifier
@@ -69,6 +83,7 @@ fun JoinLobby(
                     )
                 )
         ) {
+            // Profile Button
             IconButton(
                 onClick = { },
                 modifier = Modifier
@@ -84,8 +99,9 @@ fun JoinLobby(
                     tint = MaterialTheme.colorScheme.primary
                 )
             }
+            // Back Button
             IconButton(
-                onClick = {  },
+                onClick = { navController.popBackStack() },
                 modifier = Modifier
                     .bounceClick()
                     .align(Alignment.TopStart)
@@ -100,11 +116,12 @@ fun JoinLobby(
 
             Box(
                 modifier = Modifier
-                    .padding(bottom = 195.dp)
+                    .padding(bottom = 100.dp)
                     .align(Alignment.Center)
                     .size(100.dp),
                 contentAlignment = Alignment.Center
             ) {
+                // 'OR' Text
                 Text(
                     "OR",
                     fontSize = 54.sp,
@@ -127,31 +144,42 @@ fun JoinLobby(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(20.dp))
-                        .padding(horizontal = 16.dp, vertical = 30.dp),
-                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                        .padding(horizontal = 16.dp, vertical = 16.dp),
+                    verticalArrangement = Arrangement.spacedBy(10.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+                    // Scan QR Button
                     StyledButton(
                         text = "Scan QR",
                         icon = { Icon(
-                            Icons.Outlined.CameraAlt, contentDescription = null, modifier = Modifier.size(24.dp)) },
+                            Icons.Outlined.CameraAlt, contentDescription = null, modifier = Modifier.size(32.dp)) },
                         color = MaterialTheme.colorScheme.primary,
-                        onClick = { },
+                        onClick = { scope.launch { onScanBarcode() } },
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(26.dp),
-                        fontSize = 24.sp
+                        shape = RoundedCornerShape(20.dp),
+                        verticalPadding = 32.dp,
+                        fontSize = 32.sp
+                    )
+                    Text(
+                        text = "QR Status: " + (barcodeValue?: "00000000"),
+                        color = MaterialTheme.colorScheme.secondary,
+                        textAlign = TextAlign.Center,
+                        fontSize = 16.sp
                     )
                 }
 
                 Column(
                     modifier = Modifier
-                        .fillMaxWidth()
+                        .fillMaxSize()
                         .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(20.dp))
-                        .padding(horizontal = 16.dp, vertical = 30.dp),
-                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                        .padding(horizontal = 8.dp, vertical = 8.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
+                    // Bus Route Buttons
                     FlowRow(
                         modifier = Modifier
-                            .fillMaxWidth(),
+                            .fillMaxSize(),
+                        horizontalArrangement = Arrangement.spacedBy(4.dp),
                         maxItemsInEachRow = 2,
                     ) {
                         StyledButton(
@@ -300,5 +328,9 @@ fun BusIdDialog(
 @Composable
 fun PreviewJoinLobbyScreen()
 {
-    // JoinLobby()
+    val context = LocalContext.current
+    val barcodeScanner = BarcodeScanner(context)
+    val joinLobbyViewModel: JoinLobbyViewModel = viewModel()
+    val barcodeResults = barcodeScanner.barCodeResults.collectAsStateWithLifecycle()
+    JoinLobby(navController = rememberNavController(), joinLobbyViewModel, barcodeScanner::startScan, barcodeResults.value)
 }
