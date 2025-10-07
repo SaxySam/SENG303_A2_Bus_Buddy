@@ -35,10 +35,11 @@ fun MainGameplay(modifier: Modifier = Modifier) {
     val sprites = remember { mutableStateListOf<Sprite>() }
     val spriteRects = remember { mutableStateMapOf<Long, Rect>() }
     var busRect by remember { mutableStateOf<Rect?>(null) }
+    var isRunning by remember { mutableStateOf(true) }
 
     // Main game loop
     LaunchedEffect(Sprites) {
-        while (true) {
+        while (isRunning) {
             backgroundSFX = soundPool.play(background, 0.7f, 0.7f, 1, -1, 1f)
             // Select random object to blit
             val type = Sprites.random(random = Random)
@@ -55,6 +56,7 @@ fun MainGameplay(modifier: Modifier = Modifier) {
             soundPool.play(coin, 1f, 1f, 1, 0, 1f)
         } else {
             //todo: handle game over
+//            isRunning = false
             soundPool.stop(backgroundSFX)
             soundPool.play(crash, 1f, 1f, 1, 0, 1f)
             soundPool.play(gameOver, 1f, 1f, 1, 0, 1f)
