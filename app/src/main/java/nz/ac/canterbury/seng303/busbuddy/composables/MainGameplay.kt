@@ -22,6 +22,7 @@ import kotlinx.coroutines.delay
 import nz.ac.canterbury.seng303.busbuddy.models.BusStop
 import nz.ac.canterbury.seng303.busbuddy.models.Player
 import nz.ac.canterbury.seng303.busbuddy.models.Sprite
+import nz.ac.canterbury.seng303.busbuddy.models.SpriteType
 import nz.ac.canterbury.seng303.busbuddy.models.SpriteType.Companion.Sprites
 import kotlin.random.Random
 
@@ -29,6 +30,7 @@ import kotlin.random.Random
 fun MainGameplay(modifier: Modifier = Modifier) {
     val player = Player("John", 30)
     val nextStop = BusStop("Northlands Mall",4)
+    val (soundPool, coin, crash) = rememberSoundPool()
     val sprites = remember { mutableStateListOf<Sprite>() }
     val spriteRects = remember { mutableStateMapOf<Long, Rect>() }
     var busRect by remember { mutableStateOf<Rect?>(null) }
@@ -45,8 +47,16 @@ fun MainGameplay(modifier: Modifier = Modifier) {
     }
 
     fun handleCollision(spriteId: Long) {
-        System.out.println("Collision with sprite $spriteId")
-        // TODO: end game/ update coin value
+        val sprite = sprites.firstOrNull { it.id == spriteId } ?: return
+        if (sprite.type == SpriteType.Coin) {
+            //todo: update current score value
+            soundPool.play(coin, 1f, 1f, 1, 0, 1f)
+        } else {
+            //todo: handle game over
+            soundPool.play(crash, 1f, 1f, 1, 0, 1f)
+        }
+        sprites.remove(sprite)
+        spriteRects.remove(spriteId)
     }
 
     Box(modifier.fillMaxSize()) {
