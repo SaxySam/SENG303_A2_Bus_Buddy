@@ -16,7 +16,8 @@ import nz.ac.canterbury.seng303.busbuddy.R
 
 @Composable
 fun Bus(
-    onBoundsChanged: (Rect) -> Unit = {}
+    onBoundsChanged: (Rect) -> Unit = {},
+    hitboxScale: Float = 0.85f
 ) {
     BoxWithConstraints(
         modifier = Modifier
@@ -40,7 +41,21 @@ fun Bus(
                 .onGloballyPositioned { coords ->
                     val topLeft = coords.positionInRoot()
                     val size = coords.size.toSize()
-                    onBoundsChanged(Rect(topLeft, size))
+                    val rect = Rect(topLeft, size)
+
+                    val scaled = if (hitboxScale != 1f) {
+                        val cx = (rect.left + rect.right) / 2f
+                        val cy = (rect.top + rect.bottom) / 2f
+                        val halfW = (rect.right - rect.left) / 2f * hitboxScale
+                        val halfH = (rect.bottom - rect.top) / 2f * hitboxScale
+                        Rect(
+                            left = cx - halfW,
+                            top = cy - halfH,
+                            right = cx + halfW,
+                            bottom = cy + halfH
+                        )
+                    } else rect
+                    onBoundsChanged(scaled)
                 },
             contentScale = ContentScale.FillBounds
         )
