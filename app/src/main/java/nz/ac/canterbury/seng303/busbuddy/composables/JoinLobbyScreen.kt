@@ -35,6 +35,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import nz.ac.canterbury.seng303.busbuddy.ui.theme.BusRoute1
 import nz.ac.canterbury.seng303.busbuddy.ui.theme.BusRoute3
 import nz.ac.canterbury.seng303.busbuddy.ui.theme.BusRoute5
@@ -48,7 +49,7 @@ import nz.ac.canterbury.seng303.busbuddy.viewmodels.JoinLobbyViewModel
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun JoinLobby(
-    // navController: NavController,
+    navController: NavController,
     joinLobbyViewModel: JoinLobbyViewModel
 ) {
 
@@ -244,6 +245,7 @@ fun JoinLobby(
                         joinLobbyViewModel.updateShowDialog(false)
                         joinLobbyViewModel.updateBusId("")
                         // TODO: Handle valid busId logic (take them to game if busId is true else toast message wrong busId)
+                        navController.navigate("GamePlayScreen")
                     },
                     dialogTitle = "Enter Bus ID",
                     textValue = joinLobbyViewModel.busId,

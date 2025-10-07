@@ -16,9 +16,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import nz.ac.canterbury.seng303.busbuddy.utils.SectionCard
 import nz.ac.canterbury.seng303.busbuddy.utils.ShowToast
 import nz.ac.canterbury.seng303.busbuddy.utils.StyledButton
@@ -26,7 +26,10 @@ import nz.ac.canterbury.seng303.busbuddy.utils.bounceClick
 import nz.ac.canterbury.seng303.busbuddy.utils.openURL
 
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
+fun HomeScreen(
+    navController: NavController,
+    modifer: Modifier
+) {
     val context = LocalContext.current
 
     Scaffold(
@@ -76,7 +79,9 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                             text = "Join Game",
                             icon = { Icon(Icons.Outlined.PlayArrow, contentDescription = null, modifier = Modifier.size(35.dp)) },
                             color = MaterialTheme.colorScheme.primary,
-                            onClick = { },
+                            onClick = {
+                                navController.navigate("JoinLobbyScreen")
+                            },
                             modifier = Modifier.fillMaxWidth().bounceClick(),
                             shape = RoundedCornerShape(20.dp),
                             verticalPadding = 35.dp,
@@ -132,10 +137,4 @@ fun HomeScreen(modifier: Modifier = Modifier) {
             }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewHomeScreen() {
-    HomeScreen()
 }

@@ -18,6 +18,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import kotlinx.coroutines.delay
 import nz.ac.canterbury.seng303.busbuddy.models.BusStop
 import nz.ac.canterbury.seng303.busbuddy.models.Player
@@ -27,7 +28,10 @@ import nz.ac.canterbury.seng303.busbuddy.models.SpriteType.Companion.Sprites
 import kotlin.random.Random
 
 @Composable
-fun MainGameplay(modifier: Modifier = Modifier) {
+fun MainGameplay(
+    navController: NavController,
+    modifier: Modifier = Modifier
+) {
     var backgroundSFX = 0
     val player = Player("John", 30)
     val nextStop = BusStop("Northlands Mall",4)

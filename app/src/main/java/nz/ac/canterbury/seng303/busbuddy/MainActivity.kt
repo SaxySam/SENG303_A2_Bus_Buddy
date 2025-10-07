@@ -32,16 +32,16 @@ class MainActivity : ComponentActivity() {
                     val joinLobbyViewModel: JoinLobbyViewModel = viewModel()
                     NavHost(navController = navController, startDestination = "HomeScreen") {
                         composable("HomeScreen") {
-                            HomeScreen(modifier = Modifier.padding(innerPadding))
+                            HomeScreen(navController, Modifier.padding(innerPadding))
                         }
                         composable("CameraScreen") {
                             CameraScreen()
                         }
                         composable("JoinLobbyScreen") {
-                            JoinLobby(joinLobbyViewModel)
+                            JoinLobby(navController, joinLobbyViewModel)
                         }
                         composable("GamePlayScreen") {
-                            MainGameplay(Modifier.fillMaxSize())
+                            MainGameplay(navController, Modifier.fillMaxSize())
                         }
                     }
                 }
