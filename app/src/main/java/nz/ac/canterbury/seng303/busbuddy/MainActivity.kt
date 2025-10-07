@@ -1,5 +1,6 @@
 package nz.ac.canterbury.seng303.busbuddy
 
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -19,6 +20,7 @@ import nz.ac.canterbury.seng303.busbuddy.composables.MainGameplay
 import nz.ac.canterbury.seng303.busbuddy.composables.HomeScreen
 import nz.ac.canterbury.seng303.busbuddy.composables.CameraScreen
 import nz.ac.canterbury.seng303.busbuddy.composables.JoinLobby
+import nz.ac.canterbury.seng303.busbuddy.composables.LockOrientation
 import nz.ac.canterbury.seng303.busbuddy.composables.rememberSoundPool
 import nz.ac.canterbury.seng303.busbuddy.ui.theme.BusBuddyTheme
 import nz.ac.canterbury.seng303.busbuddy.viewmodels.JoinLobbyViewModel
@@ -43,6 +45,7 @@ class MainActivity : ComponentActivity() {
                             JoinLobby(navController, joinLobbyViewModel)
                         }
                         composable("GamePlayScreen") {
+                            LockOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
                             MainGameplay(navController, Modifier.fillMaxSize())
                         }
                     }
