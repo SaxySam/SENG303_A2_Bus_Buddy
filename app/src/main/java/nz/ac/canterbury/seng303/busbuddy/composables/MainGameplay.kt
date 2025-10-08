@@ -104,6 +104,7 @@ fun MainGameplay(
         }
         Bus(onBoundsChanged = { rect -> busRect = rect })
         HUD(
+            navController,
             running = running,
             player,
             nextStop,
