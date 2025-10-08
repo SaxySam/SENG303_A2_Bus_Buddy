@@ -25,6 +25,7 @@ import kotlin.random.Random
 
 @Composable
 fun SpawnSprite(
+    running: Boolean,
     id: Long,
     sprite: Int,
     modifier: Modifier = Modifier,
@@ -49,14 +50,18 @@ fun SpawnSprite(
     val yAnim = remember { Animatable(0f) }
     val startY = -startAboveRatio * heightPx - sizePx
     val travelPx = if (heightPx <= 0f) 1f else (heightPx - startY + 1f)
-    LaunchedEffect(heightPx, sizePx, pixelsPerSecond) {
+    LaunchedEffect(running, heightPx, sizePx, pixelsPerSecond) {
         if (heightPx > 0f) {
-            yAnim.snapTo(0f)
-            val duration = ((travelPx / pixelsPerSecond) * 1000f).toInt().coerceAtLeast(1)
-            yAnim.animateTo(
-                targetValue = travelPx,
-                animationSpec = tween(durationMillis = duration, easing = LinearEasing)
-            )
+            if (running) {
+                val remainingDistance = travelPx - yAnim.value
+                val remainingDuration = ((remainingDistance / pixelsPerSecond) * 1000f).toInt().coerceAtLeast(1)
+                yAnim.animateTo(
+                    targetValue = travelPx,
+                    animationSpec = tween(durationMillis = remainingDuration, easing = LinearEasing)
+                )
+            } else {
+                yAnim.stop()
+            }
         }
     }
 
