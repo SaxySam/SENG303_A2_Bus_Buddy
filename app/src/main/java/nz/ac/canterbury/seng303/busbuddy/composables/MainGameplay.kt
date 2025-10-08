@@ -88,6 +88,7 @@ fun MainGameplay(
         sprites.forEach { s ->
             key(s.id) {
                 SpawnSprite(
+                    running = running,
                     id = s.id,
                     sprite = s.type.resId,
                     sizeDp = s.type.defaultSizeDp,
@@ -103,6 +104,7 @@ fun MainGameplay(
         }
         Bus(onBoundsChanged = { rect -> busRect = rect })
         HUD(
+            running = running,
             player,
             nextStop,
             Modifier
