@@ -32,18 +32,19 @@ fun MainGameplay(
     navController: NavController,
     modifier: Modifier = Modifier
 ) {
+    var isGameOver by remember { mutableStateOf(false) }
+    val running = !isGameOver
     val player = Player("John", 30)
     val nextStop = BusStop("Northlands Mall",4)
     val (soundPool, coin, crash, gameOver, background) = rememberSoundPool()
     val sprites = remember { mutableStateListOf<Sprite>() }
     val spriteRects = remember { mutableStateMapOf<Long, Rect>() }
     var busRect by remember { mutableStateOf<Rect?>(null) }
-    var isRunning by remember { mutableStateOf(true) }
     var bgStreamId by remember { mutableStateOf(0) }
 
     // Main game loop
     LaunchedEffect(Sprites) {
-        while (isRunning) {
+        while (running) {
             // Select random object to blit
             val type = Sprites.random(random = Random)
             sprites += Sprite(id = System.nanoTime(), type = type)
@@ -68,7 +69,8 @@ fun MainGameplay(
             //todo: update current score value
             soundPool.play(coin, 0.5f, 0.5f, 1, 0, 1f)
         } else {
-            //todo: handle game over: (set isRunning = false then navigate to a game over composable)
+            //todo: handle game over
+            isGameOver = true
             if (bgStreamId != 0) {
                 soundPool.stop(bgStreamId)
                 bgStreamId = 0
@@ -82,7 +84,7 @@ fun MainGameplay(
 
     // load compatibles
     Box(modifier.fillMaxSize()) {
-        Road(Modifier.fillMaxSize())
+        Road(running = running, Modifier.fillMaxSize())
         sprites.forEach { s ->
             key(s.id) {
                 SpawnSprite(
