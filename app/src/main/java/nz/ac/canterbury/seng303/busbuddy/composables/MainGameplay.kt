@@ -69,7 +69,6 @@ fun MainGameplay(
             //todo: update current score value
             soundPool.play(coin, 0.5f, 0.5f, 1, 0, 1f)
         } else {
-            //todo: handle game over
             isGameOver = true
             if (bgStreamId != 0) {
                 soundPool.stop(bgStreamId)
