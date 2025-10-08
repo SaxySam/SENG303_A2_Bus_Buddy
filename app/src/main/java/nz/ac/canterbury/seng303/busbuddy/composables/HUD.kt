@@ -116,10 +116,21 @@ fun HUD(navController: NavController,
                 Spacer(modifier = Modifier.height(32.dp))
                 Button(
                     onClick = { navController.navigate("GamePlayScreen") },
-                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
                 ) {
                     Text(
                         text = "Restart",
+                        color = Color.Black,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp
+                    )
+                }
+                Button(
+                    onClick = { navController.navigate("HomeScreen") },
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+                ) {
+                    Text(
+                        text = "Home",
                         color = Color.Black,
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp
