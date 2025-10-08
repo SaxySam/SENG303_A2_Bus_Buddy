@@ -273,6 +273,7 @@ fun JoinLobby(
                         joinLobbyViewModel.updateShowDialog(false)
                         joinLobbyViewModel.updateBusId("")
                         // TODO: Handle valid busId logic (take them to game if busId is true else toast message wrong busId)
+                        navController.navigate("GamePlayScreen")
                     },
                     dialogTitle = "Enter Bus ID",
                     textValue = joinLobbyViewModel.busId,

@@ -1,5 +1,6 @@
 package nz.ac.canterbury.seng303.busbuddy
 
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -21,10 +22,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.common.util.concurrent.ListenableFuture
 import nz.ac.canterbury.seng303.busbuddy.composables.HomeScreen
-import nz.ac.canterbury.seng303.busbuddy.composables.CameraScreen
 import nz.ac.canterbury.seng303.busbuddy.utils.BarcodeScanner
 import nz.ac.canterbury.seng303.busbuddy.composables.ScanBarcode
 import nz.ac.canterbury.seng303.busbuddy.composables.JoinLobby
+import nz.ac.canterbury.seng303.busbuddy.composables.LockOrientation
+import nz.ac.canterbury.seng303.busbuddy.composables.MainGameplay
 import nz.ac.canterbury.seng303.busbuddy.ui.theme.BusBuddyTheme
 import nz.ac.canterbury.seng303.busbuddy.viewmodels.JoinLobbyViewModel
 
@@ -36,16 +38,15 @@ class MainActivity : ComponentActivity() {
         cameraProviderFuture = ProcessCameraProvider.getInstance(this)
         enableEdgeToEdge()
         setContent {
+            val navController = rememberNavController()
+            val joinLobbyViewModel: JoinLobbyViewModel = viewModel()
             val context = LocalContext.current
             var darkTheme by remember {mutableStateOf(false)}
             val barcodeScanner = BarcodeScanner(context)
-            BusBuddyTheme() {
-                val navController = rememberNavController()
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    val joinLobbyViewModel: JoinLobbyViewModel = viewModel()
-                    val barcodeResults = barcodeScanner.barCodeResults.collectAsStateWithLifecycle()
+            val barcodeResults = barcodeScanner.barCodeResults.collectAsStateWithLifecycle()
 
-                    // Navigation to be added later
+            BusBuddyTheme() {
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     NavHost(navController = navController, startDestination = "HomeScreen") {
                         composable("HomeScreen") {
                             HomeScreen(navController, darkTheme = darkTheme, onThemeUpdated = {darkTheme = !darkTheme},  Modifier.padding(innerPadding))
@@ -56,7 +57,12 @@ class MainActivity : ComponentActivity() {
                         composable("QRCodeScanner") {
                             ScanBarcode(navController, barcodeScanner::startScan, barcodeResults.value)
                         }
-                        /**TODO
+                        composable("GamePlayScreen") {
+                            LockOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
+                            MainGameplay(navController, Modifier.fillMaxSize())
+                        }
+                        //todo: implement below composable navigation's
+                        /**
                         composable("LeaderBoard") {
                             // LeaderBoardScreen()
                         }

@@ -59,7 +59,7 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-
+    implementation("androidx.compose.material:material-icons-extended")
 
     /// LIFECYCLE ///
     val lifecycle_version = "2.7.0"
