@@ -1,6 +1,5 @@
 package nz.ac.canterbury.seng303.busbuddy.composables
 
-import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -20,7 +19,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.net.toUri
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import nz.ac.canterbury.seng303.busbuddy.utils.SectionCard
@@ -35,7 +33,6 @@ fun HomeScreen(navController: NavController, darkTheme: Boolean, onThemeUpdated:
     val context = LocalContext.current
 
     Scaffold(
-        bottomBar = { NavBar(navController) },
         modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
         Box(
@@ -70,9 +67,9 @@ fun HomeScreen(navController: NavController, darkTheme: Boolean, onThemeUpdated:
 
             Column(
                 modifier = Modifier
-                    .align(Alignment.Center)
+                    .align(Alignment.TopCenter)
                     .fillMaxWidth()
-                    .padding(horizontal = 24.dp),
+                    .padding(top = 100.dp, start = 24.dp, end = 24.dp),
                 verticalArrangement = Arrangement.spacedBy(28.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {

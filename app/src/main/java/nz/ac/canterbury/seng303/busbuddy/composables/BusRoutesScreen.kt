@@ -22,6 +22,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import androidx.navigation.NavController
 import com.google.android.gms.location.LocationServices
 import nz.ac.canterbury.seng303.busbuddy.R
 import nz.ac.canterbury.seng303.busbuddy.utils.RoutesDropDown
@@ -30,7 +31,7 @@ import nz.ac.canterbury.seng303.busbuddy.viewmodels.RoutesViewModel
 
 @SuppressLint("DefaultLocale")
 @Composable
-fun BusRoutesScreen() {
+fun BusRoutesScreen(navController: NavController, selectedItem: Int) {
     val context = LocalContext.current
     val viewModel = remember { RoutesViewModel(context) }
 
@@ -56,7 +57,9 @@ fun BusRoutesScreen() {
         }
     }
 
-    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+    Scaffold(
+        modifier = Modifier.fillMaxSize()
+    ) { innerPadding ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
