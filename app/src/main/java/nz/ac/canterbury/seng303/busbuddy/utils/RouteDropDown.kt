@@ -15,12 +15,34 @@ import nz.ac.canterbury.seng303.busbuddy.viewmodels.RoutesViewModel
 @Composable
 fun RoutesDropDown(viewModel: RoutesViewModel) {
     val routes = listOf(
-        "3 - Airport/Princess Margaret" to Color(0xFFE53935),
-        "17 - Bryndwr/Huntsbury" to Color(0xFF1E88E5),
-        "28 - Casebrook/Lyttelton" to Color(0xFF43A047),
-        "80 - Lincoln/Burnside" to Color(0xFF8E24AA),
-        "125 - Redwood/Westlake" to Color(0xFFFFB300),
-        "Orbiter" to Color(0xFF009688)
+        "1" to Color(0xFF2BF1E1),
+        "3" to Color(0xFF8358E8),
+        "5" to Color(0xFFD9B716),
+        "7" to Color(0xFFCB7212),
+        "8" to Color(0xFFEE15C0),
+        "Oc" to Color(0xFF399D23),
+        "27" to Color(0xFFE16514),
+        "29" to Color(0xFF07288A),
+        "44" to Color(0xFF17BBA4),
+        "60" to Color(0xFFE114D7),
+        "80" to Color(0xFF8257AF),
+        "95" to Color(0xFFE70F0F),
+        "97" to Color(0xFFA274A8),
+        "100" to Color(0xFF8B807C),
+        "107" to Color(0xFF44A296),
+        "120" to Color(0xFFF6A625),
+        "125" to Color(0xFF5F983F),
+        "130" to Color(0xFFA03A24),
+        "135" to Color(0xFF16B04B),
+        "140" to Color(0xFF10919D),
+        "155" to Color(0xFF6B4194),
+        "820" to Color(0xFF37B45C),
+        "F" to Color(0xFF155992),
+        "81" to Color(0xFFEB597D),
+        "85" to Color(0xFFEF594B),
+        "86" to Color(0xFFF1CD44),
+        "91" to Color(0xFF108B45),
+        "92" to Color(0xFF8F643F)
     )
 
     var expanded by remember { mutableStateOf(false) }

@@ -1,17 +1,29 @@
 package nz.ac.canterbury.seng303.busbuddy.composables
 
+import android.Manifest
+import android.content.Context
+import android.content.pm.PackageManager
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresPermission
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
+import com.google.android.gms.location.LocationServices
 import nz.ac.canterbury.seng303.busbuddy.utils.RoutesDropDown
 import nz.ac.canterbury.seng303.busbuddy.utils.SectionCard
 import nz.ac.canterbury.seng303.busbuddy.viewmodels.RoutesViewModel
@@ -20,6 +32,24 @@ import nz.ac.canterbury.seng303.busbuddy.viewmodels.RoutesViewModel
 fun BusRoutesScreen() {
     val context = LocalContext.current
     val viewModel = remember { RoutesViewModel(context) }
+    var nextStopName by remember { mutableStateOf("—") }
+    var nextStopDistance by remember { mutableStateOf<Double?>(null) }
+
+    val permissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { results ->
+        val fine = results[Manifest.permission.ACCESS_FINE_LOCATION] == true
+        val coarse = results[Manifest.permission.ACCESS_COARSE_LOCATION] == true
+        if (fine || coarse) {
+            findNextStop(context, viewModel) { stop, distance ->
+                nextStopName = stop
+                nextStopDistance = distance
+            }
+        } else {
+            nextStopName = "Permission denied"
+            nextStopDistance = null
+        }
+    }
 
     Scaffold(
         modifier = Modifier.fillMaxSize()
@@ -37,20 +67,100 @@ fun BusRoutesScreen() {
                     )
                 )
         ) {
-            Box (modifier = Modifier.padding(20.dp)) {
+            Column (modifier = Modifier.padding(20.dp)) {
                 SectionCard(title = "Routes") {
-                    // Add bus routes drop down
                     RoutesDropDown(viewModel)
-                    // Display proximity to next stop
+                    Spacer(Modifier.padding(8.dp))
 
+                    Button(
+                        onClick = {
+                            val fineGranted = ContextCompat.checkSelfPermission(
+                                context,
+                                Manifest.permission.ACCESS_FINE_LOCATION
+                            ) == PackageManager.PERMISSION_GRANTED
+                            val coarseGranted = ContextCompat.checkSelfPermission(
+                                context,
+                                Manifest.permission.ACCESS_COARSE_LOCATION
+                            ) == PackageManager.PERMISSION_GRANTED
 
+                            if (fineGranted || coarseGranted) {
+                                findNextStop(context, viewModel) { stop, distance ->
+                                    nextStopName = stop
+                                    nextStopDistance = distance
+                                }
+                            } else {
+                                permissionLauncher.launch(
+                                    arrayOf(
+                                        Manifest.permission.ACCESS_FINE_LOCATION,
+                                        Manifest.permission.ACCESS_COARSE_LOCATION
+                                    )
+                                )
+                            }
+                        },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text("Find Next Stop")
+                    }
 
-//                val busMap: Painter = painterResource(id = R.drawable.metro_map_christchurch)
-//                ZoomableImage(
-//                    busMap = busMap
-//                )
+                    Spacer(Modifier.padding(16.dp))
+
+                    SectionCard(title = "Next Stop") {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = nextStopName,
+                                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                            nextStopDistance?.let {
+                                Spacer(modifier = Modifier.height(4.dp))
+                                Text(
+                                    text = String.format("Distance: %.2f km", it / 1000),
+                                    style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
+                                    color = MaterialTheme.colorScheme.onSurface
+                                )
+                            }
+                        }
+                    }
                 }
+
+                Spacer(Modifier.padding(16.dp))
+                SectionCard(title = "Map") {}
             }
         }
     }
+}
+
+
+@RequiresPermission(anyOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
+fun findNextStop(
+    context: Context,
+    viewModel: RoutesViewModel,
+    updateText: (stopName: String, distanceMeters: Double?) -> Unit
+) {
+    val fusedLocation = LocationServices.getFusedLocationProviderClient(context)
+    fusedLocation.lastLocation
+        .addOnSuccessListener { location ->
+            if (location != null) {
+                val next = viewModel.getNextStop(location.latitude, location.longitude)
+                if (next != null) {
+                    val distance = viewModel.distanceMeters(
+                        location.latitude, location.longitude,
+                        next.lat, next.lon
+                    )
+                    updateText(next.name, distance)
+                } else {
+                    updateText("No nearby stops found", null)
+                }
+            } else {
+                updateText("Unable to get location", null)
+            }
+        }
+        .addOnFailureListener {
+            updateText("Failed to get location", null)
+        }
 }
