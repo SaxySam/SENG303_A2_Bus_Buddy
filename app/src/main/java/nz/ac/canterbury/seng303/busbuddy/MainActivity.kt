@@ -21,6 +21,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.common.util.concurrent.ListenableFuture
+import nz.ac.canterbury.seng303.busbuddy.composables.AccountDrawer
 import nz.ac.canterbury.seng303.busbuddy.composables.HomeScreen
 import nz.ac.canterbury.seng303.busbuddy.utils.BarcodeScanner
 import nz.ac.canterbury.seng303.busbuddy.composables.ScanBarcode
@@ -47,19 +48,27 @@ class MainActivity : ComponentActivity() {
 
             BusBuddyTheme() {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    NavHost(navController = navController, startDestination = "HomeScreen") {
+                    NavHost(navController = navController, startDestination = "AccountDrawer") {
+
                         composable("HomeScreen") {
                             HomeScreen(navController, darkTheme = darkTheme, onThemeUpdated = {darkTheme = !darkTheme},  Modifier.padding(innerPadding))
                         }
+
                         composable("JoinLobbyScreen") {
                             JoinLobby(navController, joinLobbyViewModel, barcodeScanner::startScan, barcodeResults.value)
                         }
+
                         composable("QRCodeScanner") {
                             ScanBarcode(navController, barcodeScanner::startScan, barcodeResults.value)
                         }
+
                         composable("GamePlayScreen") {
                             LockOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
                             MainGameplay(navController, Modifier.fillMaxSize())
+                        }
+
+                        composable("AccountDrawer") {
+                            AccountDrawer(navController)
                         }
                         //todo: implement below composable navigation's
                         /**

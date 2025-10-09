@@ -53,7 +53,7 @@ fun HomeScreen(navController: NavController, darkTheme: Boolean, onThemeUpdated:
         ) {
             // Profile Button
             IconButton(
-                onClick = { },
+                onClick = { /*(navController)*/ },
                 modifier = Modifier
                     .align(Alignment.TopEnd)
                     .padding(16.dp)
