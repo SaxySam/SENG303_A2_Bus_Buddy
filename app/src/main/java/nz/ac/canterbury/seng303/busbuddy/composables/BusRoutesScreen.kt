@@ -1,39 +1,44 @@
 package nz.ac.canterbury.seng303.busbuddy.composables
 
+import ZoomableImage
+
+import ZoomableImage
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresPermission
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import com.google.android.gms.location.LocationServices
+import nz.ac.canterbury.seng303.busbuddy.R
 import nz.ac.canterbury.seng303.busbuddy.utils.RoutesDropDown
 import nz.ac.canterbury.seng303.busbuddy.utils.SectionCard
 import nz.ac.canterbury.seng303.busbuddy.viewmodels.RoutesViewModel
 
+@SuppressLint("DefaultLocale")
 @Composable
 fun BusRoutesScreen() {
     val context = LocalContext.current
     val viewModel = remember { RoutesViewModel(context) }
     var nextStopName by remember { mutableStateOf("—") }
     var nextStopDistance by remember { mutableStateOf<Double?>(null) }
+
+    val scrollState = rememberScrollState()
 
     val permissionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
@@ -67,10 +72,14 @@ fun BusRoutesScreen() {
                     )
                 )
         ) {
-            Column (modifier = Modifier.padding(20.dp)) {
+            Column(
+                modifier = Modifier
+                    .padding(20.dp)
+                    .verticalScroll(scrollState)
+            ) {
                 SectionCard(title = "Routes") {
                     RoutesDropDown(viewModel)
-                    Spacer(Modifier.padding(8.dp))
+                    Spacer(Modifier.height(8.dp))
 
                     Button(
                         onClick = {
@@ -101,40 +110,45 @@ fun BusRoutesScreen() {
                     ) {
                         Text("Find Next Stop")
                     }
+                }
 
-                    Spacer(Modifier.padding(16.dp))
+                Spacer(Modifier.height(16.dp))
 
-                    SectionCard(title = "Next Stop") {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
+                SectionCard(title = "Next Stop") {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = nextStopName,
+                            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                        nextStopDistance?.let {
+                            Spacer(modifier = Modifier.height(4.dp))
                             Text(
-                                text = nextStopName,
-                                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                                color = MaterialTheme.colorScheme.onSurface
+                                text = String.format("Distance: %.2f km", it / 1000),
+                                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
+                                color = MaterialTheme.colorScheme.secondary
                             )
-                            nextStopDistance?.let {
-                                Spacer(modifier = Modifier.height(4.dp))
-                                Text(
-                                    text = String.format("Distance: %.2f km", it / 1000),
-                                    style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
-                                    color = MaterialTheme.colorScheme.onSurface
-                                )
-                            }
                         }
                     }
                 }
 
-                Spacer(Modifier.padding(16.dp))
-                SectionCard(title = "Map") {}
+                Spacer(Modifier.height(16.dp))
+
+                SectionCard(title = "Map") {
+                    val image = painterResource(R.drawable.metro_map_christchurch)
+                    ZoomableImage(image)
+                }
+
+                Spacer(Modifier.height(32.dp))
             }
         }
     }
 }
-
 
 @RequiresPermission(anyOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
 fun findNextStop(

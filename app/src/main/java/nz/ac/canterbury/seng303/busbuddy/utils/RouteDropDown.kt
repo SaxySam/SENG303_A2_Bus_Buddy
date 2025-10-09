@@ -76,7 +76,7 @@ fun RoutesDropDown(viewModel: RoutesViewModel) {
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
-            containerColor = MaterialTheme.colorScheme.surface,
+            containerColor = Color(0xDAFFFFFF),
         ) {
             routes.forEach { route ->
                 DropdownMenuItem(
@@ -96,7 +96,7 @@ fun RoutesDropDown(viewModel: RoutesViewModel) {
                         }
                     },
                     colors = MenuDefaults.itemColors(
-                        textColor = MaterialTheme.colorScheme.onPrimary,
+                        textColor = MaterialTheme.colorScheme.primary,
                         leadingIconColor = MaterialTheme.colorScheme.surface
                     )
                 )
