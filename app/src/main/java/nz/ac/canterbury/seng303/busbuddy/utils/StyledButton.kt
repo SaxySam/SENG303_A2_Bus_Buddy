@@ -34,7 +34,8 @@ fun StyledButton(
         colors = ButtonDefaults.buttonColors(containerColor = color),
         shape = shape,
         modifier = modifier
-            .shadow(6.dp, shape),
+            .shadow(6.dp, shape)
+            .bounceClick(),
         contentPadding = PaddingValues(horizontal = 12.dp, vertical = verticalPadding)
     ) {
         icon()

@@ -9,7 +9,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import nz.ac.canterbury.seng303.busbuddy.ui.theme.*
+import nz.ac.canterbury.seng303.busbuddy.utils.bounceClick
 
 
 data class NavItem(
@@ -37,11 +40,17 @@ fun NavBar(navController: NavController) {
     ) {
         items.forEach { (icon, label, index, route) ->
             NavigationBarItem(
+                modifier = Modifier
+                .bounceClick(),
                 selected = selectedItem == index,
                 onClick = {
                     selectedItem = index
-                    navController.navigate(route)
-                          },
+                    when (selectedItem) {
+                        // TODO
+                        0 -> { navController.navigate("LeaderBoard") }
+                        1 -> { navController.navigate("HomeScreen") }
+                        2 -> { navController.navigate("BusRoutes") }
+                    } },
                 icon = {
                     Icon(
                         imageVector = icon,
@@ -59,5 +68,17 @@ fun NavBar(navController: NavController) {
                 )
             )
         }
+    }
+}
+
+@Preview
+@Composable
+fun PreviewNavBar() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = MaterialTheme.colorScheme.background)
+    ) {
+        NavBar(navController = rememberNavController())
     }
 }
