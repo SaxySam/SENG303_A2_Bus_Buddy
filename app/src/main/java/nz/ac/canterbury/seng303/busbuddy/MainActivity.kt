@@ -68,7 +68,7 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable("AccountDrawer") {
-                            AccountDrawer(navController)
+                            val accountDrawer = AccountDrawer(); accountDrawer.Screen()
                         }
                         //todo: implement below composable navigation's
                         /**

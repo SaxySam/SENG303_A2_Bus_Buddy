@@ -55,6 +55,7 @@ import nz.ac.canterbury.seng303.busbuddy.utils.BarcodeScanner
 import nz.ac.canterbury.seng303.busbuddy.utils.StyledButton
 import nz.ac.canterbury.seng303.busbuddy.utils.bounceClick
 import nz.ac.canterbury.seng303.busbuddy.viewmodels.JoinLobbyViewModel
+import org.koin.core.component.getScopeId
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -68,6 +69,7 @@ fun JoinLobby(
     val scope = rememberCoroutineScope()
 
     Scaffold(
+        topBar = { val accountDrawer = AccountDrawer(); accountDrawer.Screen() },
         bottomBar = { NavBar(navController) }
     ) { innerPadding ->
         Box(
@@ -83,37 +85,6 @@ fun JoinLobby(
                     )
                 )
         ) {
-            // Profile Button
-            IconButton(
-                onClick = { },
-                modifier = Modifier
-                    .bounceClick()
-                    .align(Alignment.TopEnd)
-                    .padding(16.dp)
-                    .shadow(8.dp, RoundedCornerShape(50))
-                    .background(MaterialTheme.colorScheme.background, RoundedCornerShape(50))
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.AccountBox,
-                    contentDescription = "Profile",
-                    tint = MaterialTheme.colorScheme.primary
-                )
-            }
-            // Back Button
-            IconButton(
-                onClick = { navController.popBackStack() },
-                modifier = Modifier
-                    .bounceClick()
-                    .align(Alignment.TopStart)
-                    .padding(16.dp)
-            ) {
-                Icon(
-                    Icons.Filled.ArrowBackIosNew,
-                    contentDescription = "Back Button",
-                    tint = MaterialTheme.colorScheme.onPrimary
-                )
-            }
-
             Box(
                 modifier = Modifier
                     .padding(bottom = 100.dp)
@@ -136,8 +107,8 @@ fun JoinLobby(
                 modifier = Modifier
                     .align(Alignment.TopCenter)
                     .fillMaxWidth()
-                    .padding(horizontal = 28.dp, vertical = 80.dp),
-                verticalArrangement = Arrangement.spacedBy(160.dp),
+                    .padding(horizontal = 28.dp, vertical = 64.dp),
+                verticalArrangement = Arrangement.spacedBy(128.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Column(

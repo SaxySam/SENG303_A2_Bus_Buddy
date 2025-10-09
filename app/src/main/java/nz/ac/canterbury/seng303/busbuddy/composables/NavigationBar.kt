@@ -10,6 +10,7 @@ import androidx.compose.material.icons.filled.Map
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -48,6 +49,7 @@ fun NavBar(navController: NavController) {
                 icon = {
                     Icon(
                         imageVector = icon,
+                        tint = Color.White,
                         contentDescription = label
                     )
                 },
