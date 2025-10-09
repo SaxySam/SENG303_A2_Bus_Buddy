@@ -1,8 +1,6 @@
 package nz.ac.canterbury.seng303.busbuddy.composables
 
 import ZoomableImage
-
-import ZoomableImage
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
@@ -35,10 +33,12 @@ import nz.ac.canterbury.seng303.busbuddy.viewmodels.RoutesViewModel
 fun BusRoutesScreen() {
     val context = LocalContext.current
     val viewModel = remember { RoutesViewModel(context) }
+
+    val isLoading by viewModel.loading.collectAsState()
+    val scrollState = rememberScrollState()
+
     var nextStopName by remember { mutableStateOf("—") }
     var nextStopDistance by remember { mutableStateOf<Double?>(null) }
-
-    val scrollState = rememberScrollState()
 
     val permissionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
@@ -56,9 +56,7 @@ fun BusRoutesScreen() {
         }
     }
 
-    Scaffold(
-        modifier = Modifier.fillMaxSize()
-    ) { innerPadding ->
+    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -72,79 +70,86 @@ fun BusRoutesScreen() {
                     )
                 )
         ) {
-            Column(
-                modifier = Modifier
-                    .padding(20.dp)
-                    .verticalScroll(scrollState)
-            ) {
-                SectionCard(title = "Routes") {
-                    RoutesDropDown(viewModel)
-                    Spacer(Modifier.height(8.dp))
+            if (isLoading) {
+                CircularProgressIndicator(
+                    modifier = Modifier.align(Alignment.Center),
+                    color = MaterialTheme.colorScheme.secondary
+                )
+            } else {
+                Column(
+                    modifier = Modifier
+                        .padding(20.dp)
+                        .verticalScroll(scrollState)
+                ) {
+                    SectionCard(title = "Routes") {
+                        RoutesDropDown(viewModel)
+                        Spacer(Modifier.height(8.dp))
 
-                    Button(
-                        onClick = {
-                            val fineGranted = ContextCompat.checkSelfPermission(
-                                context,
-                                Manifest.permission.ACCESS_FINE_LOCATION
-                            ) == PackageManager.PERMISSION_GRANTED
-                            val coarseGranted = ContextCompat.checkSelfPermission(
-                                context,
-                                Manifest.permission.ACCESS_COARSE_LOCATION
-                            ) == PackageManager.PERMISSION_GRANTED
+                        Button(
+                            onClick = {
+                                val fineGranted = ContextCompat.checkSelfPermission(
+                                    context,
+                                    Manifest.permission.ACCESS_FINE_LOCATION
+                                ) == PackageManager.PERMISSION_GRANTED
+                                val coarseGranted = ContextCompat.checkSelfPermission(
+                                    context,
+                                    Manifest.permission.ACCESS_COARSE_LOCATION
+                                ) == PackageManager.PERMISSION_GRANTED
 
-                            if (fineGranted || coarseGranted) {
-                                findNextStop(context, viewModel) { stop, distance ->
-                                    nextStopName = stop
-                                    nextStopDistance = distance
-                                }
-                            } else {
-                                permissionLauncher.launch(
-                                    arrayOf(
-                                        Manifest.permission.ACCESS_FINE_LOCATION,
-                                        Manifest.permission.ACCESS_COARSE_LOCATION
+                                if (fineGranted || coarseGranted) {
+                                    findNextStop(context, viewModel) { stop, distance ->
+                                        nextStopName = stop
+                                        nextStopDistance = distance
+                                    }
+                                } else {
+                                    permissionLauncher.launch(
+                                        arrayOf(
+                                            Manifest.permission.ACCESS_FINE_LOCATION,
+                                            Manifest.permission.ACCESS_COARSE_LOCATION
+                                        )
                                     )
-                                )
-                            }
-                        },
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text("Find Next Stop")
-                    }
-                }
-
-                Spacer(Modifier.height(16.dp))
-
-                SectionCard(title = "Next Stop") {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(
-                            text = nextStopName,
-                            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
-                        nextStopDistance?.let {
-                            Spacer(modifier = Modifier.height(4.dp))
-                            Text(
-                                text = String.format("Distance: %.2f km", it / 1000),
-                                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
-                                color = MaterialTheme.colorScheme.secondary
-                            )
+                                }
+                            },
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text("Find Next Stop")
                         }
                     }
+
+                    Spacer(Modifier.height(16.dp))
+
+                    SectionCard(title = "Next Stop") {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = nextStopName,
+                                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                            nextStopDistance?.let {
+                                Spacer(modifier = Modifier.height(4.dp))
+                                Text(
+                                    text = String.format("Distance: %.2f km", it / 1000),
+                                    style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
+                                    color = MaterialTheme.colorScheme.secondary
+                                )
+                            }
+                        }
+                    }
+
+                    Spacer(Modifier.height(16.dp))
+
+                    SectionCard(title = "Map") {
+                        val image = painterResource(R.drawable.metro_map_christchurch)
+                        ZoomableImage(image)
+                    }
+
+                    Spacer(Modifier.height(32.dp))
                 }
-
-                Spacer(Modifier.height(16.dp))
-
-                SectionCard(title = "Map") {
-                    val image = painterResource(R.drawable.metro_map_christchurch)
-                    ZoomableImage(image)
-                }
-
-                Spacer(Modifier.height(32.dp))
             }
         }
     }
