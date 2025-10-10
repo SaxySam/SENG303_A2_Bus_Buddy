@@ -68,7 +68,6 @@ fun JoinLobby(
     val scope = rememberCoroutineScope()
 
     Scaffold(
-        bottomBar = { NavBar(navController) }
     ) { innerPadding ->
         Box(
             modifier = Modifier
