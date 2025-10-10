@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -18,9 +17,7 @@ import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.automirrored.outlined.LiveHelp
 import androidx.compose.material.icons.automirrored.outlined.Login
 import androidx.compose.material.icons.automirrored.outlined.Logout
-import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.NotificationsActive
 import androidx.compose.material.icons.filled.Settings
@@ -31,10 +28,8 @@ import androidx.compose.material.icons.outlined.NotificationsActive
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.ThumbsUpDown
 import androidx.compose.material3.DrawerValue
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
@@ -42,8 +37,6 @@ import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -64,10 +57,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
-import nz.ac.canterbury.seng303.busbuddy.data.NavigationItem
-import nz.ac.canterbury.seng303.busbuddy.ui.theme.BlueGradientStart
+import nz.ac.canterbury.seng303.busbuddy.data.NavigationButtonItem
 import nz.ac.canterbury.seng303.busbuddy.ui.theme.Typography
-import nz.ac.canterbury.seng303.busbuddy.utils.bounceClick
 import nz.ac.canterbury.seng303.busbuddy.R.drawable.ic_launcher_foreground
 import nz.ac.canterbury.seng303.busbuddy.utils.ThemeSwitcher
 
@@ -79,44 +70,44 @@ class AccountDrawer() {
         var darkTheme by remember {mutableStateOf(false)}
         val loggedInItems = listOf(
 
-            NavigationItem(
+            NavigationButtonItem(
                 title = "My Account",
                 selectedIcon = Icons.Filled.AccountCircle,
                 unselectedIcon = Icons.Outlined.AccountCircle,
                 onClickEvent = {}
             ),
-            NavigationItem(
+            NavigationButtonItem(
                 title = "Updates",
                 selectedIcon = Icons.Filled.NotificationsActive,
                 unselectedIcon = Icons.Outlined.NotificationsActive,
                 badgeCount = 1,
                 onClickEvent = {}
             ),
-            NavigationItem(
+            NavigationButtonItem(
                 title = "Help",
                 selectedIcon = Icons.AutoMirrored.Filled.LiveHelp,
                 unselectedIcon = Icons.AutoMirrored.Outlined.LiveHelp,
                 onClickEvent = {}
             ),
-            NavigationItem(
+            NavigationButtonItem(
                 title = "Feedback",
                 selectedIcon = Icons.Filled.ThumbsUpDown,
                 unselectedIcon = Icons.Outlined.ThumbsUpDown,
                 onClickEvent = {}
             ),
-            NavigationItem(
+            NavigationButtonItem(
                 title = "Settings",
                 selectedIcon = Icons.Filled.Settings,
                 unselectedIcon = Icons.Outlined.Settings,
                 onClickEvent = {}
             ),
-            NavigationItem(
+            NavigationButtonItem(
                 title = "About This App",
                 selectedIcon = Icons.Filled.Info,
                 unselectedIcon = Icons.Outlined.Info,
                 onClickEvent = {}
             ),
-            NavigationItem(
+            NavigationButtonItem(
                 title = "Log Out",
                 selectedIcon = Icons.AutoMirrored.Filled.Logout,
                 unselectedIcon = Icons.AutoMirrored.Outlined.Logout,
@@ -126,25 +117,25 @@ class AccountDrawer() {
 
         val loggedOutItems = listOf(
 
-            NavigationItem(
+            NavigationButtonItem(
                 title = "Log In",
                 selectedIcon = Icons.AutoMirrored.Filled.Login,
                 unselectedIcon = Icons.AutoMirrored.Outlined.Login,
                 onClickEvent = {}
             ),
-            NavigationItem(
+            NavigationButtonItem(
                 title = "Help",
                 selectedIcon = Icons.AutoMirrored.Filled.LiveHelp,
                 unselectedIcon = Icons.AutoMirrored.Outlined.LiveHelp,
                 onClickEvent = {}
             ),
-            NavigationItem(
+            NavigationButtonItem(
                 title = "Settings",
                 selectedIcon = Icons.Filled.Settings,
                 unselectedIcon = Icons.Outlined.Settings,
                 onClickEvent = {}
             ),
-            NavigationItem(
+            NavigationButtonItem(
                 title = "About This App",
                 selectedIcon = Icons.Filled.Info,
                 unselectedIcon = Icons.Outlined.Info,
@@ -210,7 +201,7 @@ class AccountDrawer() {
                     }
                     HorizontalDivider()
                     Spacer(modifier = Modifier.height(16.dp))
-                    (if (isSignedIn) loggedInItems else loggedOutItems).forEachIndexed<NavigationItem> { index, item ->
+                    (if (isSignedIn) loggedInItems else loggedOutItems).forEachIndexed<NavigationButtonItem> { index, item ->
                         NavigationDrawerItem(
                             label = {
                                 Text(

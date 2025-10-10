@@ -31,7 +31,7 @@ import nz.ac.canterbury.seng303.busbuddy.viewmodels.RoutesViewModel
 
 @SuppressLint("DefaultLocale")
 @Composable
-fun BusRoutesScreen(navController: NavController, selectedItem: Int) {
+fun BusRoutesScreen(navController: NavController) {
     val context = LocalContext.current
     val viewModel = remember { RoutesViewModel(context) }
 
