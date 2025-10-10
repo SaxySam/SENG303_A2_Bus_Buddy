@@ -1,5 +1,6 @@
 package nz.ac.canterbury.seng303.busbuddy.composables
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -67,9 +68,10 @@ fun JoinLobby(
 ) {
 
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
 
     Scaffold(
-        topBar = { val accountDrawer = AccountDrawer(); accountDrawer.Screen() },
+        topBar = { TopBar({ navController.navigate("AccountDrawer") }, navController) },
         bottomBar = { NavBar(navController) }
     ) { innerPadding ->
         Box(
@@ -108,7 +110,7 @@ fun JoinLobby(
                     .align(Alignment.TopCenter)
                     .fillMaxWidth()
                     .padding(horizontal = 28.dp, vertical = 64.dp),
-                verticalArrangement = Arrangement.spacedBy(128.dp),
+                verticalArrangement = Arrangement.spacedBy(160.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Column(

@@ -48,7 +48,7 @@ class MainActivity : ComponentActivity() {
 
             BusBuddyTheme() {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    NavHost(navController = navController, startDestination = "AccountDrawer") {
+                    NavHost(navController = navController, startDestination = "HomeScreen") {
 
                         composable("HomeScreen") {
                             HomeScreen(navController, darkTheme = darkTheme, onThemeUpdated = {darkTheme = !darkTheme},  Modifier.padding(innerPadding))
@@ -68,7 +68,7 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable("AccountDrawer") {
-                            val accountDrawer = AccountDrawer(); accountDrawer.Screen()
+                            val accountDrawer = AccountDrawer(); accountDrawer.Screen(true, navController)
                         }
                         //todo: implement below composable navigation's
                         /**

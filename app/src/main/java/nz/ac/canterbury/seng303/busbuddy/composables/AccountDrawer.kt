@@ -47,6 +47,8 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -66,12 +68,14 @@ import nz.ac.canterbury.seng303.busbuddy.ui.theme.BlueGradientStart
 import nz.ac.canterbury.seng303.busbuddy.ui.theme.Typography
 import nz.ac.canterbury.seng303.busbuddy.utils.bounceClick
 import nz.ac.canterbury.seng303.busbuddy.R.drawable.ic_launcher_foreground
+import nz.ac.canterbury.seng303.busbuddy.utils.ThemeSwitcher
 
 class AccountDrawer() {
 
     @Composable
-    fun Screen(modifier: Modifier = Modifier, isSignedIn: Boolean = true)
+    fun Screen(isSignedIn: Boolean = true, navController: NavController)
     {
+        var darkTheme by remember {mutableStateOf(false)}
         val loggedInItems = listOf(
 
             NavigationItem(
@@ -226,84 +230,29 @@ class AccountDrawer() {
             Scaffold(
                 topBar = {
                     TopBar(
-                        navController = rememberNavController(),
+                        navController = navController,
                         onOpenDrawer = {
                             scope.launch {
                                 currentDrawerState.apply {
                                     if (isClosed) open() else close()
                                 }
                             }
-                        }
+                        },
                     )
-                }
+                },
+                bottomBar = { NavBar(navController) }
             ) { padding ->
-                ScreenContent(Modifier.padding(padding))
+                ScreenContent(Modifier.padding(padding), darkTheme = darkTheme, onThemeUpdated = {darkTheme = !darkTheme}  )
             }
 
         }
     }
 
-
     @Composable
-    @OptIn(ExperimentalMaterial3Api::class)
-    fun TopBar(
-        modifier: Modifier = Modifier,
-        onOpenDrawer: () -> Unit,
-        navController: NavController
-    ) {
-        TopAppBar(
-            modifier = Modifier.fillMaxWidth(),
-            title = { },
-            colors = TopAppBarDefaults.topAppBarColors(containerColor = BlueGradientStart),
-            navigationIcon = {
-                Box(modifier = Modifier.fillMaxWidth()) {
-                    IconButton(
-                        onClick = { onOpenDrawer() },
-                        modifier = Modifier
-                            .bounceClick()
-                            .padding(all = 8.dp)
-                            .align(Alignment.TopEnd)
-                            .shadow(8.dp, RoundedCornerShape(50))
-                            .background(
-                                MaterialTheme.colorScheme.background,
-                                RoundedCornerShape(50)
-                            )
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.AccountBox,
-                            contentDescription = "Profile",
-                            tint = MaterialTheme.colorScheme.primary,
-                        )
-                    }
-                    if (navController.currentDestination?.route != "HomeScreen")
-                        IconButton(
-                            onClick = { navController.popBackStack() },
-                            modifier = Modifier
-                                .bounceClick()
-                                .padding(all = 8.dp)
-                                .align(Alignment.TopStart)
-                                .shadow(8.dp, RoundedCornerShape(50))
-                                .background(
-                                    MaterialTheme.colorScheme.background,
-                                    RoundedCornerShape(50)
-                                )
-                        ) {
-                            Icon(
-                                Icons.Filled.ArrowBackIosNew,
-                                contentDescription = "Back Button",
-                                tint = MaterialTheme.colorScheme.primary
-                            )
-                        }
-                }
-            }
+    fun ScreenContent(modifier: Modifier = Modifier, darkTheme: Boolean, onThemeUpdated: () -> Unit) {
 
-        )
-    }
-
-    @Composable
-    fun ScreenContent(modifier: Modifier = Modifier) {
-
-        Box(modifier = Modifier.fillMaxSize().padding(24.dp).background(Color.Red))
+        Box(modifier = Modifier.fillMaxSize().padding(24.dp))
+        ThemeSwitcher(darkTheme = darkTheme, onClick = onThemeUpdated, 0.9f, 0.65f, 0.6f)
         rememberNavController().currentDestination;
     }
 
@@ -316,7 +265,7 @@ class AccountDrawer() {
                 .background(color = MaterialTheme.colorScheme.background)
         ) {
             val accountDrawer = AccountDrawer()
-            accountDrawer.Screen()
+            accountDrawer.Screen(true, rememberNavController())
             rememberDrawerState(initialValue = DrawerValue.Open)
         }
     }

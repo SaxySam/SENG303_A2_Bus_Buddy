@@ -1,6 +1,7 @@
 package nz.ac.canterbury.seng303.busbuddy.composables
 
 import android.content.Intent
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -55,7 +56,7 @@ fun HomeScreen(navController: NavController, darkTheme: Boolean, onThemeUpdated:
     val context = LocalContext.current
 
     Scaffold(
-        topBar = { val accountDrawer = AccountDrawer(); accountDrawer.Screen() },
+        topBar = { TopBar({ navController.navigate("AccountDrawer") }, navController) },
         bottomBar = { NavBar(navController) },
         modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
