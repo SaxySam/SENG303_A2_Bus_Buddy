@@ -22,6 +22,9 @@
     <uses-permission android:name="android.permission.TYPE_GYROSCOPE" />
     <uses-permission android:name="android.permission.TYPE_ACCELEROMETER" />
 
+    <!-- Post Notifications Permissions -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+
     <uses-feature android:name="android.hardware.camera" android:required="false" />
 
     <application

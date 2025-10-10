@@ -1,5 +1,6 @@
 package nz.ac.canterbury.seng303.busbuddy.composables
 
+import android.Manifest
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -10,6 +11,7 @@ import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.outlined.PlayArrow
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -20,16 +22,32 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
 import nz.ac.canterbury.seng303.busbuddy.R
+import nz.ac.canterbury.seng303.busbuddy.utils.NotificationHandler
 import nz.ac.canterbury.seng303.busbuddy.utils.SectionCard
 import nz.ac.canterbury.seng303.busbuddy.utils.ShowToast
 import nz.ac.canterbury.seng303.busbuddy.utils.StyledButton
 import nz.ac.canterbury.seng303.busbuddy.utils.openURL
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
 @Composable
 fun HomeScreen(navController: NavController, darkTheme: Boolean, onThemeUpdated: () -> Unit, modifier: Modifier = Modifier) {
     val context = LocalContext.current
+
+    val postNotificationPermission = rememberPermissionState(permission = Manifest.permission.POST_NOTIFICATIONS)
+    val notificationHandler = NotificationHandler(context)
+
+    LaunchedEffect(key1 = true) {
+        if (!postNotificationPermission.status.isGranted) {
+            postNotificationPermission.launchPermissionRequest()
+        }
+
+    }
+
+    notificationHandler.showSimpleNotification()
 
     Scaffold(
         topBar = { TopBar({ navController.navigate("AccountDrawer") }, navController) },
