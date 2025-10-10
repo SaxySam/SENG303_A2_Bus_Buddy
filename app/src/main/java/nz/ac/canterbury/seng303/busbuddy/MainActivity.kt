@@ -17,6 +17,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -25,6 +28,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.common.util.concurrent.ListenableFuture
+import nz.ac.canterbury.seng303.busbuddy.composables.AccountDrawer
 import nz.ac.canterbury.seng303.busbuddy.composables.HomeScreen
 import nz.ac.canterbury.seng303.busbuddy.utils.BarcodeScanner
 import nz.ac.canterbury.seng303.busbuddy.composables.ScanBarcode
@@ -38,7 +42,6 @@ import nz.ac.canterbury.seng303.busbuddy.viewmodels.JoinLobbyViewModel
 class MainActivity : ComponentActivity() {
     private lateinit var cameraProviderFuture : ListenableFuture<ProcessCameraProvider>
 
-    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         cameraProviderFuture = ProcessCameraProvider.getInstance(this)
@@ -54,32 +57,23 @@ class MainActivity : ComponentActivity() {
 
             BusBuddyTheme {
                 Scaffold(
-                    modifier = Modifier.fillMaxSize(),
-                    bottomBar = {
-                        NavBar(
-                            navController = navController,
-                            selectedItem = selectedItem,
-                            onItemSelected = { selectedItem = it }
-                        )
-                    }
-                ) {
+                    modifier = Modifier.fillMaxSize()) { innerPadding ->
                     NavHost(
                         navController = navController,
                         startDestination = "HomeScreen",
                     ) {
                         composable("HomeScreen") {
-                            HomeScreen(
-                                navController,
-                                darkTheme = darkTheme,
-                                onThemeUpdated = { darkTheme = !darkTheme }
-                            )
+                            HomeScreen(navController, darkTheme = darkTheme, onThemeUpdated = {darkTheme = !darkTheme})
                         }
+
                         composable("JoinLobbyScreen") {
                             JoinLobby(navController, joinLobbyViewModel, barcodeScanner::startScan, barcodeResults.value)
                         }
+
                         composable("QRCodeScanner") {
                             ScanBarcode(navController, barcodeScanner::startScan, barcodeResults.value)
                         }
+
                         composable("GamePlayScreen") {
                             LockOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
                             MainGameplay(navController, Modifier.fillMaxSize())
@@ -87,9 +81,17 @@ class MainActivity : ComponentActivity() {
                         composable("BusRoutesScreen") {
                             BusRoutesScreen(navController = navController, selectedItem = selectedItem)
                         }
+
+                        composable("AccountDrawer") {
+                            val accountDrawer = AccountDrawer(); accountDrawer.Screen(true, navController)
+                        }
+                        innerPadding
+                        //todo: implement below composable navigation's
+                        /**
                         composable("LeaderBoard") {
                             // LeaderBoardScreen()
                         }
+                         */
                     }
                 }
             }
