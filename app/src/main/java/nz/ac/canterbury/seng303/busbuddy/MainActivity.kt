@@ -63,7 +63,7 @@ class MainActivity : ComponentActivity() {
                         startDestination = "HomeScreen",
                     ) {
                         composable("HomeScreen") {
-                            HomeScreen(navController, darkTheme = darkTheme, onThemeUpdated = {darkTheme = !darkTheme}, Modifier.padding(innerPadding))
+                            HomeScreen(navController, darkTheme = darkTheme, onThemeUpdated = {darkTheme = !darkTheme})
                         }
 
                         composable("JoinLobbyScreen") {
@@ -85,6 +85,7 @@ class MainActivity : ComponentActivity() {
                         composable("AccountDrawer") {
                             val accountDrawer = AccountDrawer(); accountDrawer.Screen(true, navController)
                         }
+                        innerPadding
                         //todo: implement below composable navigation's
                         /**
                         composable("LeaderBoard") {

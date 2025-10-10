@@ -16,24 +16,17 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import nz.ac.canterbury.seng303.busbuddy.data.NavItem
 import nz.ac.canterbury.seng303.busbuddy.ui.theme.*
 import nz.ac.canterbury.seng303.busbuddy.utils.bounceClick
-
-
-data class NavItem(
-    val icon: ImageVector,
-    val label: String,
-    val index: Int,
-    val route: String
-)
-
 
 @Composable
 fun NavBar(
     navController: NavController,
-    selectedItem: Int,
-    onItemSelected: (Int) -> Unit
+//    selectedItem: Int,
+//    onItemSelected: (Int) -> Unit
 ) {
+    var selectedItem by remember { mutableIntStateOf(1) }
     val items = listOf(
         NavItem(Icons.Filled.EmojiEvents, "Leaderboard", 0, "LeaderBoard"),
         NavItem(Icons.Filled.Home, "Home", 1, "HomeScreen"),
@@ -50,8 +43,8 @@ fun NavBar(
                 modifier = Modifier.bounceClick(),
                 selected = selectedItem == index,
                 onClick = {
-                    onItemSelected(index)
-                    when (index) {
+                    selectedItem = index
+                    when (selectedItem) {
                         0 -> navController.navigate("LeaderBoard")
                         1 -> navController.navigate("HomeScreen")
                         2 -> navController.navigate("BusRoutesScreen")

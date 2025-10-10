@@ -58,7 +58,9 @@ fun BusRoutesScreen(navController: NavController, selectedItem: Int) {
     }
 
     Scaffold(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
+        topBar = { TopBar({ navController.navigate("AccountDrawer") }, navController) },
+        bottomBar = { NavBar(navController) },
     ) { innerPadding ->
         Box(
             modifier = Modifier
