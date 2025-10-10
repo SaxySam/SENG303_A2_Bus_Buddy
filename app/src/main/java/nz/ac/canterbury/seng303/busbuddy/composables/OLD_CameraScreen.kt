@@ -105,7 +105,6 @@ fun CameraView(viewModel: CameraViewModel = koinViewModel()) {
                 onClick = { Toast.makeText(context, "Sent Toast", Toast.LENGTH_SHORT).show(); barcodeScanner::startScan },
                 modifier = Modifier.bounceClick()) },
         floatingActionButtonPosition = FabPosition.Center,
-        bottomBar = { NavBar(navController) }
     ) { paddingValues: PaddingValues ->
         Box(modifier = Modifier.fillMaxSize()) {
             AndroidView(

@@ -75,9 +75,9 @@ fun HomeScreen(navController: NavController, darkTheme: Boolean, onThemeUpdated:
         ) {
             Column(
                 modifier = Modifier
-                    .align(Alignment.Center)
+                    .align(Alignment.TopCenter)
                     .fillMaxWidth()
-                    .padding(horizontal = 24.dp),
+                    .padding(top = 100.dp, start = 24.dp, end = 24.dp),
                 verticalArrangement = Arrangement.spacedBy(28.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
