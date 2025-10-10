@@ -20,8 +20,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import nz.ac.canterbury.seng303.busbuddy.R
 import nz.ac.canterbury.seng303.busbuddy.ui.theme.BlueGradientStart
 import nz.ac.canterbury.seng303.busbuddy.utils.bounceClick
 
@@ -31,6 +34,7 @@ fun TopBar(
     onOpenDrawer: () -> Unit,
     navController: NavController,
 ) {
+    val context = LocalContext.current
     TopAppBar(
         modifier = Modifier.fillMaxWidth(),
         title = { },

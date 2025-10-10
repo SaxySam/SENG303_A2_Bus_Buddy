@@ -33,7 +33,7 @@ fun Bus(
 
         Image(
             painter = painter,
-            contentDescription = "Player bus",
+            contentDescription = "Player Bus",
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .width(maxWidth * 0.20f)

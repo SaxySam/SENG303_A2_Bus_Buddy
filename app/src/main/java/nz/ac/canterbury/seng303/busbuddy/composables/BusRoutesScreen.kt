@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
@@ -52,7 +53,7 @@ fun BusRoutesScreen(navController: NavController) {
                 nextStopDistance = distance
             }
         } else {
-            nextStopName = "Permission denied"
+            nextStopName = context.getString(R.string.PermissionDenied)
             nextStopDistance = null
         }
     }
@@ -86,7 +87,7 @@ fun BusRoutesScreen(navController: NavController) {
                         .padding(20.dp)
                         .verticalScroll(scrollState)
                 ) {
-                    SectionCard(title = "Routes") {
+                    SectionCard(title = context.getString(R.string.BusRoutes)) {
                         RoutesDropDown(viewModel)
                         Spacer(Modifier.height(8.dp))
 
@@ -117,13 +118,13 @@ fun BusRoutesScreen(navController: NavController) {
                             },
                             modifier = Modifier.fillMaxWidth()
                         ) {
-                            Text("Find Next Stop")
+                            Text(context.getString(R.string.FindNextStop))
                         }
                     }
 
                     Spacer(Modifier.height(16.dp))
 
-                    SectionCard(title = "Next Stop") {
+                    SectionCard(title = context.getString(R.string.NextStop)) {
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -138,7 +139,7 @@ fun BusRoutesScreen(navController: NavController) {
                             nextStopDistance?.let {
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Text(
-                                    text = String.format("Distance: %.2f km", it / 1000),
+                                    text = String.format(stringResource(R.string.DistanceFormattedKm), it / 1000),
                                     style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
                                     color = MaterialTheme.colorScheme.secondary
                                 )
@@ -148,10 +149,9 @@ fun BusRoutesScreen(navController: NavController) {
 
                     Spacer(Modifier.height(16.dp))
 
-                    SectionCard(title = "Map") {
-                        val image = painterResource(R.drawable.metro_map_christchurch)
-                        ZoomableImage(image)
-                    }
+                    SectionCard(
+                        title = context.getString(R.string.Map)) { val image = painterResource(R.drawable.metro_map_christchurch); ZoomableImage(image) }
+//                        onClick = { openURL(context, "https://go.metroinfo.co.nz/mtbp/en-gb/arrivals/content/routes", ShowToast.SHOW) } }
 
                     Spacer(Modifier.height(32.dp))
                 }
@@ -178,13 +178,13 @@ fun findNextStop(
                     )
                     updateText(next.name, distance)
                 } else {
-                    updateText("No nearby stops found", null)
+                    updateText(context.getString(R.string.NoNearbyStopsFound), null)
                 }
             } else {
-                updateText("Unable to get location", null)
+                updateText(context.getString(R.string.UnableToGetLocation), null)
             }
         }
         .addOnFailureListener {
-            updateText("Failed to get location", null)
+            updateText(context.getString(R.string.FailedToGetLocation), null)
         }
 }

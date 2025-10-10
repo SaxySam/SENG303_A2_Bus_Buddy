@@ -16,15 +16,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.isGranted
-import com.google.accompanist.permissions.rememberPermissionState
-import nz.ac.canterbury.seng303.busbuddy.utils.NotificationHandler
+import nz.ac.canterbury.seng303.busbuddy.R
 import nz.ac.canterbury.seng303.busbuddy.utils.SectionCard
 import nz.ac.canterbury.seng303.busbuddy.utils.ShowToast
 import nz.ac.canterbury.seng303.busbuddy.utils.StyledButton
@@ -73,11 +71,11 @@ fun HomeScreen(navController: NavController, darkTheme: Boolean, onThemeUpdated:
                 verticalArrangement = Arrangement.spacedBy(28.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                SectionCard(title = "Game") {
+                SectionCard(title = context.getString(R.string.Game)) {
                     Column(verticalArrangement = Arrangement.spacedBy(16.dp), modifier = Modifier.fillMaxWidth()) {
                         // Join Game Button
                         StyledButton(
-                            text = "Join Game",
+                            text = context.getString(R.string.JoinGame),
                             icon = { Icon(Icons.Outlined.PlayArrow, contentDescription = null, modifier = Modifier.size(35.dp)) },
                             color = MaterialTheme.colorScheme.primary,
                             onClick = { navController.navigate("JoinLobbyScreen") },
@@ -89,7 +87,7 @@ fun HomeScreen(navController: NavController, darkTheme: Boolean, onThemeUpdated:
 
                         // Leaderboard Button
                         StyledButton(
-                            text = "Leaderboard",
+                            text = context.getString(R.string.Leaderboard),
                             icon = { Icon(Icons.Filled.EmojiEvents, contentDescription = null) },
                             color = MaterialTheme.colorScheme.secondary,
                             onClick = { navController.navigate("Leaderboard") },
@@ -99,11 +97,11 @@ fun HomeScreen(navController: NavController, darkTheme: Boolean, onThemeUpdated:
                     }
                 }
 
-                SectionCard(title = "Bus") {
+                SectionCard(title = stringResource(R.string.Bus)) {
                     Column(verticalArrangement = Arrangement.spacedBy(16.dp), modifier = Modifier.fillMaxWidth()) {
                         // Bus Routes Button
                         StyledButton(
-                            text = "Bus Routes",
+                            text = context.getString(R.string.BusRoutes),
                             icon = { Icon(Icons.Filled.Map, contentDescription = null) },
                             color = MaterialTheme.colorScheme.tertiary,
                             onClick = { },
@@ -114,22 +112,22 @@ fun HomeScreen(navController: NavController, darkTheme: Boolean, onThemeUpdated:
                         Row(horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth()) {
                             // Card Top-Up Button
                             StyledButton(
-                                text = "Top up",
+                                text = context.getString(R.string.TopUp),
                                 icon = { Icon(Icons.AutoMirrored.Filled.OpenInNew, contentDescription = null) },
                                 color = MaterialTheme.colorScheme.tertiaryContainer,
                                 onClick = {
-                                    openURL(context, "https://metrocard.metroinfo.co.nz/#/profile/topup", ShowToast.HIDE)
+                                    openURL(context, "https://metrocard.metroinfo.co.nz/#/profile/topup", ShowToast.SHOW)
                                 },
                                 modifier = Modifier.weight(1f),
                                 shape = RoundedCornerShape(20.dp)
                             )
                             // Metro Updates Button
                             StyledButton(
-                                text = "Updates",
+                                text = context.getString(R.string.Updates),
                                 icon = { Icon(Icons.AutoMirrored.Filled.OpenInNew, contentDescription = null) },
                                 color = MaterialTheme.colorScheme.tertiaryContainer,
                                 onClick = {
-                                    openURL(context, "https://go.metroinfo.co.nz/mtbp/en-gb/journey-planner/content/favorites", ShowToast.HIDE)
+                                    openURL(context, "https://go.metroinfo.co.nz/mtbp/en-gb/journey-planner/content/favorites", ShowToast.SHOW)
                                 },
                                 modifier = Modifier.weight(1f),
                                 shape = RoundedCornerShape(20.dp)
