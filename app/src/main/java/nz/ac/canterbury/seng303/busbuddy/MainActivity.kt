@@ -51,7 +51,7 @@ class MainActivity : ComponentActivity() {
                     NavHost(navController = navController, startDestination = "HomeScreen") {
 
                         composable("HomeScreen") {
-                            HomeScreen(navController, darkTheme = darkTheme, onThemeUpdated = {darkTheme = !darkTheme},  Modifier.padding(innerPadding))
+                            HomeScreen(navController, darkTheme = darkTheme, onThemeUpdated = {darkTheme = !darkTheme}, Modifier.padding(innerPadding))
                         }
 
                         composable("JoinLobbyScreen") {

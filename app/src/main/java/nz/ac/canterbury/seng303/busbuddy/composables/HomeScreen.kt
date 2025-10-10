@@ -147,9 +147,6 @@ fun HomeScreen(navController: NavController, darkTheme: Boolean, onThemeUpdated:
                 }
             }
         }
-
-        // Dark Mode Button
-        ThemeSwitcher(darkTheme = darkTheme, onClick = onThemeUpdated, 0.9f, 0.65f, 0.6f)
     }
 }
 

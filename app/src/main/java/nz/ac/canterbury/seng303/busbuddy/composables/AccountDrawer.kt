@@ -3,6 +3,7 @@ package nz.ac.canterbury.seng303.busbuddy.composables
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -82,37 +83,44 @@ class AccountDrawer() {
                 title = "My Account",
                 selectedIcon = Icons.Filled.AccountCircle,
                 unselectedIcon = Icons.Outlined.AccountCircle,
+                onClickEvent = {}
             ),
             NavigationItem(
                 title = "Updates",
                 selectedIcon = Icons.Filled.NotificationsActive,
                 unselectedIcon = Icons.Outlined.NotificationsActive,
-                badgeCount = 1
+                badgeCount = 1,
+                onClickEvent = {}
             ),
             NavigationItem(
                 title = "Help",
                 selectedIcon = Icons.AutoMirrored.Filled.LiveHelp,
                 unselectedIcon = Icons.AutoMirrored.Outlined.LiveHelp,
+                onClickEvent = {}
             ),
             NavigationItem(
                 title = "Feedback",
                 selectedIcon = Icons.Filled.ThumbsUpDown,
                 unselectedIcon = Icons.Outlined.ThumbsUpDown,
+                onClickEvent = {}
             ),
             NavigationItem(
                 title = "Settings",
                 selectedIcon = Icons.Filled.Settings,
                 unselectedIcon = Icons.Outlined.Settings,
+                onClickEvent = {}
             ),
             NavigationItem(
                 title = "About This App",
                 selectedIcon = Icons.Filled.Info,
                 unselectedIcon = Icons.Outlined.Info,
+                onClickEvent = {}
             ),
             NavigationItem(
                 title = "Log Out",
                 selectedIcon = Icons.AutoMirrored.Filled.Logout,
                 unselectedIcon = Icons.AutoMirrored.Outlined.Logout,
+                onClickEvent = {}
             )
         )
 
@@ -122,21 +130,25 @@ class AccountDrawer() {
                 title = "Log In",
                 selectedIcon = Icons.AutoMirrored.Filled.Login,
                 unselectedIcon = Icons.AutoMirrored.Outlined.Login,
+                onClickEvent = {}
             ),
             NavigationItem(
                 title = "Help",
                 selectedIcon = Icons.AutoMirrored.Filled.LiveHelp,
                 unselectedIcon = Icons.AutoMirrored.Outlined.LiveHelp,
+                onClickEvent = {}
             ),
             NavigationItem(
                 title = "Settings",
                 selectedIcon = Icons.Filled.Settings,
                 unselectedIcon = Icons.Outlined.Settings,
+                onClickEvent = {}
             ),
             NavigationItem(
                 title = "About This App",
                 selectedIcon = Icons.Filled.Info,
                 unselectedIcon = Icons.Outlined.Info,
+                onClickEvent = {}
             )
         )
 
@@ -208,6 +220,7 @@ class AccountDrawer() {
                             },
                             selected = (index == selectedItemIndex),
                             onClick = {
+                                item.onClickEvent;
                                 selectedItemIndex = index;
                                 scope.launch { currentDrawerState.close() }
                             },
@@ -242,17 +255,66 @@ class AccountDrawer() {
                 },
                 bottomBar = { NavBar(navController) }
             ) { padding ->
-                ScreenContent(Modifier.padding(padding), darkTheme = darkTheme, onThemeUpdated = {darkTheme = !darkTheme}  )
+                ScreenContent(Modifier.padding(padding), darkTheme = darkTheme, onThemeUpdated = {darkTheme = !darkTheme}, isSignedIn)
             }
 
         }
     }
 
     @Composable
-    fun ScreenContent(modifier: Modifier = Modifier, darkTheme: Boolean, onThemeUpdated: () -> Unit) {
+    fun ScreenContent(modifier: Modifier = Modifier,
+                      darkTheme: Boolean,
+                      onThemeUpdated: () -> Unit,
+                      isSignedIn: Boolean){
 
-        Box(modifier = Modifier.fillMaxSize().padding(24.dp))
-        ThemeSwitcher(darkTheme = darkTheme, onClick = onThemeUpdated, 0.9f, 0.65f, 0.6f)
+        Box(modifier = Modifier.fillMaxSize().padding(horizontal = 24.dp, vertical = 92.dp))
+        {
+            Column {
+                Text(
+                    "Your Account: ",
+                    color = Color.Black,
+                    style = Typography.headlineSmall,
+                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp)
+                )
+                if (isSignedIn) {
+                    Text(
+                        "Display Name: ",
+                        color = Color.Black,
+                        style = Typography.titleMedium,
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp)
+                    )
+                    Text(
+                        "Account Name: ",
+                        color = Color.Black,
+                        style = Typography.titleMedium,
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp)
+                    )
+
+                    Spacer(modifier = Modifier.height(64.dp))
+                    Text(
+                        "Most Travelled Bus Route: ",
+                        color = Color.Black,
+                        style = Typography.headlineSmall,
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp)
+                    )
+                    Spacer(modifier = Modifier.height(64.dp))
+                    Text(
+                        "Highest Score: ",
+                        color = Color.Black,
+                        style = Typography.headlineSmall,
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp)
+                    )
+                    Spacer(modifier = Modifier.height(64.dp))
+                    Text(
+                        "Active Since: ",
+                        color = Color.Black,
+                        style = Typography.headlineSmall,
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp)
+                    )
+                }
+            }
+            ThemeSwitcher(darkTheme = darkTheme, onClick = onThemeUpdated, 0.95f, 0.85f, 0.6f)
+        }
         rememberNavController().currentDestination;
     }
 
