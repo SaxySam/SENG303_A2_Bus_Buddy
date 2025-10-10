@@ -11,6 +11,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -18,19 +19,18 @@ import androidx.navigation.compose.rememberNavController
 import nz.ac.canterbury.seng303.busbuddy.data.NavBarItem
 import nz.ac.canterbury.seng303.busbuddy.ui.theme.*
 import nz.ac.canterbury.seng303.busbuddy.utils.bounceClick
+import nz.ac.canterbury.seng303.busbuddy.R
 
 @Composable
 fun NavBar(
     navController: NavController,
-//    selectedItem: Int,
-//    onItemSelected: (Int) -> Unit
 ) {
     var selectedItem by remember { mutableIntStateOf(1) }
-//    var selectedItem: Int = 1
+    val context = LocalContext.current
     val items = listOf(
-        NavBarItem(Icons.Filled.EmojiEvents, "Leaderboard", 0, "Leaderboard"),
-        NavBarItem(Icons.Filled.Home, "Home", 1, "HomeScreen"),
-        NavBarItem(Icons.Filled.Map, "Bus Routes", 2, "BusRoutesScreen")
+        NavBarItem(Icons.Filled.EmojiEvents, context.getString(R.string.Leaderboard), 0, "Leaderboard"),
+        NavBarItem(Icons.Filled.Home, context.getString(R.string.Home), 1, "HomeScreen"),
+        NavBarItem(Icons.Filled.Map, context.getString(R.string.BusRoutes), 2, "BusRoutesScreen")
     )
 
     NavigationBar(
@@ -53,10 +53,10 @@ fun NavBar(
                 label = {
                     Text(
                         text = label,
-//                        color = if (selectedItem == index)
-                            color = MaterialTheme.colorScheme.onPrimary
-//                        else
-//                            MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                        color = if (selectedItem == index)
+                            MaterialTheme.colorScheme.onPrimary
+                        else
+                            MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
                     )
                 },
                 colors = NavigationBarItemDefaults.colors(

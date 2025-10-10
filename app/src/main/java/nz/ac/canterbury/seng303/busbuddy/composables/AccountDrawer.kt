@@ -51,6 +51,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -61,54 +62,56 @@ import nz.ac.canterbury.seng303.busbuddy.data.NavigationButtonItem
 import nz.ac.canterbury.seng303.busbuddy.ui.theme.Typography
 import nz.ac.canterbury.seng303.busbuddy.R.drawable.ic_launcher_foreground
 import nz.ac.canterbury.seng303.busbuddy.utils.ThemeSwitcher
+import nz.ac.canterbury.seng303.busbuddy.R
 
 class AccountDrawer() {
 
     @Composable
     fun Screen(isSignedIn: Boolean = true, navController: NavController)
     {
+        val context = LocalContext.current
         var darkTheme by remember {mutableStateOf(false)}
         val loggedInItems = listOf(
 
             NavigationButtonItem(
-                title = "My Account",
+                title = context.getString(R.string.MyAccount),
                 selectedIcon = Icons.Filled.AccountCircle,
                 unselectedIcon = Icons.Outlined.AccountCircle,
                 onClickEvent = {}
             ),
             NavigationButtonItem(
-                title = "Updates",
+                title = context.getString(R.string.Updates),
                 selectedIcon = Icons.Filled.NotificationsActive,
                 unselectedIcon = Icons.Outlined.NotificationsActive,
                 badgeCount = 1,
                 onClickEvent = {}
             ),
             NavigationButtonItem(
-                title = "Help",
+                title = context.getString(R.string.Help),
                 selectedIcon = Icons.AutoMirrored.Filled.LiveHelp,
                 unselectedIcon = Icons.AutoMirrored.Outlined.LiveHelp,
                 onClickEvent = {}
             ),
             NavigationButtonItem(
-                title = "Feedback",
+                title = context.getString(R.string.Feedback),
                 selectedIcon = Icons.Filled.ThumbsUpDown,
                 unselectedIcon = Icons.Outlined.ThumbsUpDown,
                 onClickEvent = {}
             ),
             NavigationButtonItem(
-                title = "Settings",
+                title = context.getString(R.string.Settings),
                 selectedIcon = Icons.Filled.Settings,
                 unselectedIcon = Icons.Outlined.Settings,
                 onClickEvent = {}
             ),
             NavigationButtonItem(
-                title = "About This App",
+                title = context.getString(R.string.AboutThisApp),
                 selectedIcon = Icons.Filled.Info,
                 unselectedIcon = Icons.Outlined.Info,
                 onClickEvent = {}
             ),
             NavigationButtonItem(
-                title = "Log Out",
+                title = context.getString(R.string.LogOut),
                 selectedIcon = Icons.AutoMirrored.Filled.Logout,
                 unselectedIcon = Icons.AutoMirrored.Outlined.Logout,
                 onClickEvent = {}
@@ -118,25 +121,25 @@ class AccountDrawer() {
         val loggedOutItems = listOf(
 
             NavigationButtonItem(
-                title = "Log In",
+                title = context.getString(R.string.LogIn),
                 selectedIcon = Icons.AutoMirrored.Filled.Login,
                 unselectedIcon = Icons.AutoMirrored.Outlined.Login,
                 onClickEvent = {}
             ),
             NavigationButtonItem(
-                title = "Help",
+                title = context.getString(R.string.Help),
                 selectedIcon = Icons.AutoMirrored.Filled.LiveHelp,
                 unselectedIcon = Icons.AutoMirrored.Outlined.LiveHelp,
                 onClickEvent = {}
             ),
             NavigationButtonItem(
-                title = "Settings",
+                title = context.getString(R.string.Settings),
                 selectedIcon = Icons.Filled.Settings,
                 unselectedIcon = Icons.Outlined.Settings,
                 onClickEvent = {}
             ),
             NavigationButtonItem(
-                title = "About This App",
+                title = context.getString(R.string.AboutThisApp),
                 selectedIcon = Icons.Filled.Info,
                 unselectedIcon = Icons.Outlined.Info,
                 onClickEvent = {}
@@ -168,7 +171,7 @@ class AccountDrawer() {
                                 ),
                         )
                         Text(
-                            "My Account Name:",
+                            text = context.getString(R.string.AccountName),
                             color = Color.Black,
                             style = Typography.headlineMedium,
                             modifier = Modifier
@@ -177,7 +180,7 @@ class AccountDrawer() {
                         )
                     } else {
                         Image(
-                            painter = painterResource(ic_launcher_foreground),
+                            painter = painterResource(R.drawable.ic_launcher_foreground),
                             contentDescription = "Missing Profile Image",
                             contentScale = ContentScale.Crop,
                             modifier = Modifier
@@ -191,7 +194,7 @@ class AccountDrawer() {
                                 ),
                         )
                         Text(
-                            "Not Signed In",
+                            text = context.getString(R.string.NotSignedIn),
                             color = Color.Black,
                             style = Typography.headlineSmall,
                             modifier = Modifier
@@ -258,24 +261,25 @@ class AccountDrawer() {
                       onThemeUpdated: () -> Unit,
                       isSignedIn: Boolean){
 
+        val context = LocalContext.current
         Box(modifier = Modifier.fillMaxSize().padding(horizontal = 24.dp, vertical = 92.dp))
         {
             Column {
                 Text(
-                    "Your Account: ",
+                    text = context.getString(R.string.MyAccount),
                     color = Color.Black,
-                    style = Typography.headlineSmall,
+                    style = Typography.headlineMedium,
                     modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp)
                 )
                 if (isSignedIn) {
                     Text(
-                        "Display Name: ",
+                        text = context.getString(R.string.DisplayName),
                         color = Color.Black,
                         style = Typography.titleMedium,
                         modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp)
                     )
                     Text(
-                        "Account Name: ",
+                        text = context.getString(R.string.InternalName),
                         color = Color.Black,
                         style = Typography.titleMedium,
                         modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp)
@@ -283,21 +287,21 @@ class AccountDrawer() {
 
                     Spacer(modifier = Modifier.height(64.dp))
                     Text(
-                        "Most Travelled Bus Route: ",
+                        text = context.getString(R.string.MostTravelledRoute),
                         color = Color.Black,
                         style = Typography.headlineSmall,
                         modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp)
                     )
                     Spacer(modifier = Modifier.height(64.dp))
                     Text(
-                        "Highest Score: ",
+                        text = context.getString(R.string.HighestScore),
                         color = Color.Black,
                         style = Typography.headlineSmall,
                         modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp)
                     )
                     Spacer(modifier = Modifier.height(64.dp))
                     Text(
-                        "Active Since: ",
+                        text = context.getString(R.string.ActiveSince),
                         color = Color.Black,
                         style = Typography.headlineSmall,
                         modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp)

@@ -1,6 +1,5 @@
 package nz.ac.canterbury.seng303.busbuddy.composables
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,14 +12,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountBox
-import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.outlined.CameraAlt
 import androidx.compose.material.icons.outlined.DirectionsBusFilled
-import androidx.compose.material.icons.outlined.PlayArrow
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -30,11 +25,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -46,6 +40,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
+import nz.ac.canterbury.seng303.busbuddy.R
 import nz.ac.canterbury.seng303.busbuddy.ui.theme.BusRoute1
 import nz.ac.canterbury.seng303.busbuddy.ui.theme.BusRoute3
 import nz.ac.canterbury.seng303.busbuddy.ui.theme.BusRoute5
@@ -54,9 +49,7 @@ import nz.ac.canterbury.seng303.busbuddy.ui.theme.BusRoute8
 import nz.ac.canterbury.seng303.busbuddy.ui.theme.BusRouteOrbiter
 import nz.ac.canterbury.seng303.busbuddy.utils.BarcodeScanner
 import nz.ac.canterbury.seng303.busbuddy.utils.StyledButton
-import nz.ac.canterbury.seng303.busbuddy.utils.bounceClick
 import nz.ac.canterbury.seng303.busbuddy.viewmodels.JoinLobbyViewModel
-import org.koin.core.component.getScopeId
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -96,7 +89,7 @@ fun JoinLobby(
             ) {
                 // 'OR' Text
                 Text(
-                    "OR",
+                    context.getString(R.string.Or),
                     fontSize = 54.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colorScheme.onPrimary,
@@ -123,7 +116,7 @@ fun JoinLobby(
                 ) {
                     // Scan QR Button
                     StyledButton(
-                        text = "Scan QR",
+                        text = context.getString(R.string.ScanQRBarcode),
                         icon = { Icon(
                             Icons.Outlined.CameraAlt, contentDescription = null, modifier = Modifier.size(32.dp)) },
                         color = MaterialTheme.colorScheme.primary,
@@ -131,10 +124,10 @@ fun JoinLobby(
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(20.dp),
                         verticalPadding = 32.dp,
-                        fontSize = 32.sp
+                        fontSize = 28.sp
                     )
                     Text(
-                        text = "QR Status: " + (barcodeValue?: "00000000"),
+                        text = stringResource(R.string.QRStatus, barcodeValue ?: context.getString(R.string.TempValue)),
                         color = MaterialTheme.colorScheme.secondary,
                         textAlign = TextAlign.Center,
                         fontSize = 16.sp
@@ -156,7 +149,7 @@ fun JoinLobby(
                         maxItemsInEachRow = 2,
                     ) {
                         StyledButton(
-                            text = "Orbiter",
+                            text = context.getString(R.string.Orbiter),
                             icon = { Icon(
                                 Icons.Outlined.DirectionsBusFilled, contentDescription = null, modifier = Modifier.size(24.dp)) },
                             color = BusRouteOrbiter,
@@ -169,7 +162,7 @@ fun JoinLobby(
                         )
 
                         StyledButton(
-                            text = "1",
+                            text = context.getString(R.string.OneBus),
                             icon = { Icon(
                                 Icons.Outlined.DirectionsBusFilled, contentDescription = null, modifier = Modifier.size(24.dp)) },
                             color = BusRoute1,
@@ -182,7 +175,7 @@ fun JoinLobby(
                         )
 
                         StyledButton(
-                            text = "3",
+                            text = context.getString(R.string.ThreeBus),
                             icon = { Icon(
                                 Icons.Outlined.DirectionsBusFilled, contentDescription = null, modifier = Modifier.size(24.dp)) },
                             color = BusRoute3,
@@ -195,7 +188,7 @@ fun JoinLobby(
                         )
 
                         StyledButton(
-                            text = "5",
+                            text = context.getString(R.string.FiveBus),
                             icon = { Icon(
                                 Icons.Outlined.DirectionsBusFilled, contentDescription = null, modifier = Modifier.size(24.dp)) },
                             color = BusRoute5,
@@ -208,7 +201,7 @@ fun JoinLobby(
                         )
 
                         StyledButton(
-                            text = "7",
+                            text = context.getString(R.string.SevenBus),
                             icon = { Icon(
                                 Icons.Outlined.DirectionsBusFilled, contentDescription = null, modifier = Modifier.size(24.dp)) },
                             color = BusRoute7,
@@ -221,7 +214,7 @@ fun JoinLobby(
                         )
 
                         StyledButton(
-                            text = "8",
+                            text = context.getString(R.string.EightBus),
                             icon = { Icon(
                                 Icons.Outlined.DirectionsBusFilled, contentDescription = null, modifier = Modifier.size(24.dp)) },
                             color = BusRoute8,
@@ -248,7 +241,7 @@ fun JoinLobby(
                         // TODO: Handle valid busId logic (take them to game if busId is true else toast message wrong busId)
                         navController.navigate("GamePlayScreen")
                     },
-                    dialogTitle = "Enter Bus ID",
+                    dialogTitle = context.getString(R.string.EnterBusID),
                     textValue = joinLobbyViewModel.busId,
                     onTextChange = { joinLobbyViewModel.updateBusId(it) },
                     icon = Icons.Outlined.DirectionsBusFilled
@@ -267,6 +260,7 @@ fun BusIdDialog(
     onTextChange: (String) -> Unit,
     icon: ImageVector
 ) {
+    val context = LocalContext.current
     AlertDialog(
         onDismissRequest = onDismissRequest,
         icon = { Icon(icon, contentDescription = null, modifier = Modifier.size(24.dp)) },
@@ -275,7 +269,7 @@ fun BusIdDialog(
             TextField(
                 value = textValue,
                 onValueChange = onTextChange,
-                label = { Text("Bus ID") },
+                label = { Text(context.getString(R.string.BusID)) },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
                 textStyle = TextStyle(color = MaterialTheme.colorScheme.primary)
@@ -283,12 +277,12 @@ fun BusIdDialog(
         },
         confirmButton = {
             TextButton(onClick = onConfirmation) {
-                Text("Confirm")
+                Text(context.getString(R.string.Confirm))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismissRequest) {
-                Text("Cancel")
+                Text(context.getString(R.string.Cancel))
             }
         },
         containerColor = MaterialTheme.colorScheme.onPrimary,

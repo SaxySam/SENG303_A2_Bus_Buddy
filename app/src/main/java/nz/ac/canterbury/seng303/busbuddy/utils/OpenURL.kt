@@ -26,7 +26,8 @@ fun openURL(context: Context, webLink: String, showToast: ShowToast) {
 
     when (showToast) {
         ShowToast.SHOW -> {
-            Toast.makeText(context, "Opening: $webLink", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context,
+                context.getString(R.string.OpeningApp, webLink), Toast.LENGTH_SHORT).show()
         }
         ShowToast.HIDE -> {}
     }

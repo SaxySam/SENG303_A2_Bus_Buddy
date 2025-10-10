@@ -23,7 +23,8 @@ fun ThemeSwitcher(darkTheme: Boolean = false, onClick: () -> Unit, horizontalBia
         FloatingActionButton(
             onClick = { onClick(); callToast(context, darkTheme) },
             shape = CircleShape,
-            modifier = Modifier.bounceClick()
+            modifier = Modifier
+                .bounceClick()
                 .align(BiasAlignment(horizontalBias, verticalBias))
         ) {
             if (darkTheme) {
@@ -45,11 +46,11 @@ fun ThemeSwitcher(darkTheme: Boolean = false, onClick: () -> Unit, horizontalBia
 fun callToast(context: Context, darkTheme: Boolean) {
     if (darkTheme) {
         Toast.makeText(context,
-            "Light Mode",
+            context.getString(R.string.LightMode),
             Toast.LENGTH_SHORT).show()
     } else {
         Toast.makeText(context,
-            "Dark Mode",
+            context.getString(R.string.DarkMode),
             Toast.LENGTH_SHORT).show()
     }
 }

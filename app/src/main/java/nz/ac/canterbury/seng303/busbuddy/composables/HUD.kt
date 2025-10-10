@@ -30,7 +30,10 @@ import nz.ac.canterbury.seng303.busbuddy.models.BusStop
 import androidx.compose.material.icons.filled.MonetizationOn
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
+import nz.ac.canterbury.seng303.busbuddy.R
 import nz.ac.canterbury.seng303.busbuddy.models.Player
 
 @Composable
@@ -39,6 +42,8 @@ fun HUD(navController: NavController,
         player: Player,
         nextStop: BusStop,
         modifier: Modifier = Modifier) {
+    val context = LocalContext.current
+
     if (running) {
         Box(
             modifier = modifier
@@ -53,7 +58,7 @@ fun HUD(navController: NavController,
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
                     imageVector = Icons.Filled.MonetizationOn,
-                    contentDescription = "Score",
+                    contentDescription = context.getString(R.string.Score),
                     tint = Color(0xFFFFD54F),
                     modifier = Modifier.size(35.dp)
                 )
@@ -77,7 +82,7 @@ fun HUD(navController: NavController,
                         textAlign = TextAlign.End
                     )
                     Text(
-                        text = "${nextStop.etaMinutes} mins",
+                        text = stringResource(R.string.NextStopMins, nextStop.etaMinutes),
                         fontSize = 24.sp,
                         style = MaterialTheme.typography.titleMedium.copy(color = Color.White),
                         textAlign = TextAlign.End
@@ -100,7 +105,7 @@ fun HUD(navController: NavController,
                     .padding(32.dp)
             ) {
                 Text(
-                    text = "GAME OVER",
+                    text = context.getString(R.string.GameOver),
                     color = Color.Red,
                     fontSize = 42.sp,
                     fontWeight = FontWeight.ExtraBold,
@@ -108,7 +113,7 @@ fun HUD(navController: NavController,
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = "Score: ${player.currentScore}",
+                    text = stringResource(R.string.CurrentScore, player.currentScore),
                     color = Color.White,
                     fontSize = 26.sp,
                     textAlign = TextAlign.Center
@@ -119,7 +124,7 @@ fun HUD(navController: NavController,
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
                 ) {
                     Text(
-                        text = "Restart",
+                        text = context.getString(R.string.Restart),
                         color = Color.Black,
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp
@@ -130,7 +135,7 @@ fun HUD(navController: NavController,
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
                 ) {
                     Text(
-                        text = "Home",
+                        text = context.getString(R.string.Home),
                         color = Color.Black,
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp
