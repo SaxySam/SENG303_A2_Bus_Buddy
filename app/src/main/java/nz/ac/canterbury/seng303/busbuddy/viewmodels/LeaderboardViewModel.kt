@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
+import nz.ac.canterbury.seng303.busbuddy.models.Player
 import nz.ac.canterbury.seng303.busbuddy.ui.theme.BusRoute1
 import nz.ac.canterbury.seng303.busbuddy.ui.theme.BusRoute3
 import nz.ac.canterbury.seng303.busbuddy.ui.theme.BusRoute5
@@ -25,4 +26,17 @@ class LeaderboardViewModel: ViewModel() {
     var expanded by mutableStateOf(false)
 
     var columnSize by mutableIntStateOf(0)
+
+    val players = listOf(
+        Player("John", 30),
+        Player("Alice", 120),
+        Player("Bob", 95),
+        Player("Charlie", 110),
+        Player("Diana", 130),
+        Player("Ethan", 85),
+        Player("Fiona", 140),
+        Player("George", 100),
+        Player("Hannah", 115),
+        Player("Ian", 90)
+    )
 }

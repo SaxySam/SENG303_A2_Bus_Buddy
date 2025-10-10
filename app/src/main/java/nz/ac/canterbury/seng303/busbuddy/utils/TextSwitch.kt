@@ -34,6 +34,8 @@ import androidx.compose.ui.graphics.drawscope.ContentDrawScope
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import nz.ac.canterbury.seng303.busbuddy.ui.theme.BlueGradientEnd
+import nz.ac.canterbury.seng303.busbuddy.ui.theme.BlueGradientStart
 
 // https://stackoverflow.com/questions/77330319/how-to-create-switcher-with-two-string-states
 
@@ -58,7 +60,7 @@ fun TextSwitch(
             .padding(8.dp)
             .height(56.dp)
             .clip(RoundedCornerShape(8.dp))
-            .background(Color(0xfff3f3f2))
+            .background(BlueGradientStart)
             .padding(8.dp)
     ) {
         if (items.isNotEmpty()) {
@@ -91,7 +93,7 @@ fun TextSwitch(
                     drawRoundRect(
                         topLeft = Offset(x = indicatorOffset.toPx() + padding, padding),
                         size = Size(size.width / 2 - padding * 2, size.height - padding * 2),
-                        color = Color.Black,
+                        color = Color.White,
                         cornerRadius = CornerRadius(x = 8.dp.toPx(), y = 8.dp.toPx()),
                     )
 
@@ -102,7 +104,7 @@ fun TextSwitch(
                         drawRoundRect(
                             topLeft = Offset(x = indicatorOffset.toPx(), 0f),
                             size = Size(size.width / 2, size.height),
-                            color = Color.White,
+                            color = BlueGradientEnd,
                             cornerRadius = CornerRadius(x = 8.dp.toPx(), y = 8.dp.toPx()),
                             blendMode = BlendMode.SrcOut
                         )
@@ -129,7 +131,7 @@ fun TextSwitch(
                         Text(
                             text = text,
                             fontSize = 20.sp,
-                            color = Color.Gray
+                            color = Color.White
                         )
                     }
                 }
