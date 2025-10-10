@@ -10,21 +10,27 @@ import androidx.compose.material.icons.filled.Map
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import nz.ac.canterbury.seng303.busbuddy.data.NavItem
 import nz.ac.canterbury.seng303.busbuddy.ui.theme.*
 import nz.ac.canterbury.seng303.busbuddy.utils.bounceClick
 
 @Composable
-fun NavBar(navController: NavController) {
+fun NavBar(
+    navController: NavController,
+//    selectedItem: Int,
+//    onItemSelected: (Int) -> Unit
+) {
     var selectedItem by remember { mutableIntStateOf(1) }
-
     val items = listOf(
-        Triple(Icons.Filled.EmojiEvents, "Leaderboard", 0),
-        Triple(Icons.Filled.Home, "Home", 1),
-        Triple(Icons.Filled.Map, "Bus Routes", 2)
+        NavItem(Icons.Filled.EmojiEvents, "Leaderboard", 0, "LeaderBoard"),
+        NavItem(Icons.Filled.Home, "Home", 1, "HomeScreen"),
+        NavItem(Icons.Filled.Map, "Bus Routes", 2, "BusRoutesScreen")
     )
 
     NavigationBar(
@@ -34,27 +40,24 @@ fun NavBar(navController: NavController) {
     ) {
         items.forEach { (icon, label, index) ->
             NavigationBarItem(
-                modifier = Modifier
-                .bounceClick(),
+                modifier = Modifier.bounceClick(),
                 selected = selectedItem == index,
                 onClick = {
                     selectedItem = index
                     when (selectedItem) {
-                        // TODO
-                        0 -> { navController.navigate("LeaderBoard") }
-                        1 -> { navController.navigate("HomeScreen") }
-                        2 -> { navController.navigate("BusRoutes") }
-                    } },
-                icon = {
-                    Icon(
-                        imageVector = icon,
-                        contentDescription = label
-                    )
+                        0 -> navController.navigate("LeaderBoard")
+                        1 -> navController.navigate("HomeScreen")
+                        2 -> navController.navigate("BusRoutesScreen")
+                    }
                 },
+                icon = { Icon(imageVector = icon, tint = Color.White, contentDescription = label) },
                 label = {
                     Text(
                         text = label,
-                        color = if (selectedItem == index) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                        color = if (selectedItem == index)
+                            MaterialTheme.colorScheme.onPrimary
+                        else
+                            MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
                     )
                 },
                 colors = NavigationBarItemDefaults.colors(
@@ -62,17 +65,5 @@ fun NavBar(navController: NavController) {
                 )
             )
         }
-    }
-}
-
-@Preview
-@Composable
-fun PreviewNavBar() {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = MaterialTheme.colorScheme.background)
-    ) {
-        NavBar(navController = rememberNavController())
     }
 }
