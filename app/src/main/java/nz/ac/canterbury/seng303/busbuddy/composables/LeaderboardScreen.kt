@@ -15,13 +15,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountBox
-import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.Leaderboard
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -40,11 +37,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import nz.ac.canterbury.seng303.busbuddy.models.Player
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import nz.ac.canterbury.seng303.busbuddy.ui.theme.BlueGradientStart
 import nz.ac.canterbury.seng303.busbuddy.utils.TextSwitch
-import nz.ac.canterbury.seng303.busbuddy.utils.bounceClick
+import nz.ac.canterbury.seng303.busbuddy.R
 import nz.ac.canterbury.seng303.busbuddy.viewmodels.LeaderboardViewModel
 
 @Composable
@@ -52,8 +51,10 @@ fun Leaderboard(
     navController: NavController,
     leaderboardViewModel: LeaderboardViewModel
 ) {
+    val context = LocalContext.current
     Scaffold(
-        bottomBar = { NavBar(navController) }
+        bottomBar = { NavBar(navController) },
+        topBar = { TopBar({ navController.navigate("AccountDrawer") }, navController) },
     ) { innerPadding ->
         Box(
             modifier = Modifier
@@ -68,41 +69,11 @@ fun Leaderboard(
                     )
                 )
         ) {
-            // Profile Button
-            IconButton(
-                onClick = { },
-                modifier = Modifier
-                    .bounceClick()
-                    .align(Alignment.TopEnd)
-                    .padding(16.dp)
-                    .shadow(8.dp, RoundedCornerShape(50))
-                    .background(MaterialTheme.colorScheme.background, RoundedCornerShape(50))
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.AccountBox,
-                    contentDescription = "Profile",
-                    tint = MaterialTheme.colorScheme.primary
-                )
-            }
-            // Back Button
-            IconButton(
-                onClick = { navController.popBackStack() },
-                modifier = Modifier
-                    .bounceClick()
-                    .align(Alignment.TopStart)
-                    .padding(16.dp)
-            ) {
-                Icon(
-                    Icons.Filled.ArrowBackIosNew,
-                    contentDescription = "Back Button",
-                    tint = MaterialTheme.colorScheme.onPrimary
-                )
-            }
             Column(
                 modifier = Modifier
                     .align(Alignment.TopCenter)
                     .fillMaxWidth()
-                    .padding(horizontal = 28.dp, vertical = 80.dp),
+                    .padding(horizontal = 28.dp, vertical = 50.dp),
                 verticalArrangement = Arrangement.spacedBy(30.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -124,7 +95,7 @@ fun Leaderboard(
                     )
                     // Leaderboard Text
                     Text(
-                        text = "Leaderboard",
+                        text = context.getString(R.string.Leaderboard),
                         color = MaterialTheme.colorScheme.onPrimary,
                         textAlign = TextAlign.Center,
                         fontSize = 54.sp,
@@ -153,8 +124,14 @@ fun Leaderboard(
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .background(leaderboardViewModel.selectedBusRoute.second ?: MaterialTheme.colorScheme.surface, RoundedCornerShape(12.dp))
-                                .clickable { leaderboardViewModel.expanded = !leaderboardViewModel.expanded }
+                                .background(
+                                    leaderboardViewModel.selectedBusRoute.second
+                                        ?: MaterialTheme.colorScheme.surface,
+                                    RoundedCornerShape(12.dp)
+                                )
+                                .clickable {
+                                    leaderboardViewModel.expanded = !leaderboardViewModel.expanded
+                                }
                                 .padding(12.dp)
                                 .onGloballyPositioned { coordinates ->
                                     leaderboardViewModel.columnSize = coordinates.size.width
@@ -218,7 +195,7 @@ fun Leaderboard(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            "Rank | Name | Score",
+                            context.getString(R.string.RankNameScoreTemplate),
                             color = MaterialTheme.colorScheme.onPrimary,
                             fontSize = 24.sp
                         )
@@ -230,8 +207,8 @@ fun Leaderboard(
                         verticalArrangement = Arrangement.spacedBy(8.dp),
                         contentPadding = PaddingValues(bottom = 80.dp) // leaves space above nav bar
                     ) {
-                        items(leaderboardViewModel.players.sortedByDescending { it.currentScore }) { player ->
-                            PlayerRow(player)
+                        itemsIndexed(leaderboardViewModel.players.sortedByDescending { it.currentScore }) { index, player ->
+                            PlayerRow(index + 1, player)
                         }
                     }
                 }
@@ -241,7 +218,7 @@ fun Leaderboard(
 }
 
 @Composable
-fun PlayerRow(player: Player) {
+fun PlayerRow(index: Int, player: Player) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -251,7 +228,12 @@ fun PlayerRow(player: Player) {
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = "1 | ${player.name} | ${player.currentScore}",
+            text = stringResource(
+                R.string.PlayerScoreResults,
+                index,
+                player.name,
+                player.currentScore
+            ),
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurface
         )
