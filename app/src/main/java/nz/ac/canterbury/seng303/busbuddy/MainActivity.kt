@@ -33,11 +33,13 @@ import nz.ac.canterbury.seng303.busbuddy.composables.HomeScreen
 import nz.ac.canterbury.seng303.busbuddy.utils.BarcodeScanner
 import nz.ac.canterbury.seng303.busbuddy.composables.ScanBarcode
 import nz.ac.canterbury.seng303.busbuddy.composables.JoinLobby
+import nz.ac.canterbury.seng303.busbuddy.composables.Leaderboard
 import nz.ac.canterbury.seng303.busbuddy.composables.LockOrientation
 import nz.ac.canterbury.seng303.busbuddy.composables.MainGameplay
 import nz.ac.canterbury.seng303.busbuddy.composables.NavBar
 import nz.ac.canterbury.seng303.busbuddy.ui.theme.BusBuddyTheme
 import nz.ac.canterbury.seng303.busbuddy.viewmodels.JoinLobbyViewModel
+import nz.ac.canterbury.seng303.busbuddy.viewmodels.LeaderboardViewModel
 
 class MainActivity : ComponentActivity() {
     private lateinit var cameraProviderFuture : ListenableFuture<ProcessCameraProvider>
@@ -48,12 +50,12 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             val navController = rememberNavController()
-            var selectedItem by remember { mutableIntStateOf(1) }
             val joinLobbyViewModel: JoinLobbyViewModel = viewModel()
             val context = LocalContext.current
             var darkTheme by remember {mutableStateOf(false)}
             val barcodeScanner = BarcodeScanner(context)
             val barcodeResults = barcodeScanner.barCodeResults.collectAsStateWithLifecycle()
+            val leaderboardViewModel: LeaderboardViewModel = viewModel()
 
             BusBuddyTheme {
                 Scaffold(
@@ -79,19 +81,17 @@ class MainActivity : ComponentActivity() {
                             MainGameplay(navController, Modifier.fillMaxSize())
                         }
                         composable("BusRoutesScreen") {
-                            BusRoutesScreen(navController = navController, selectedItem = selectedItem)
+                            BusRoutesScreen(navController = navController)
                         }
 
                         composable("AccountDrawer") {
                             val accountDrawer = AccountDrawer(); accountDrawer.Screen(true, navController)
                         }
                         innerPadding
-                        //todo: implement below composable navigation's
-                        /**
-                        composable("LeaderBoard") {
-                            // LeaderBoardScreen()
+
+                        composable("Leaderboard") {
+                            Leaderboard(navController, leaderboardViewModel)
                         }
-                         */
                     }
                 }
             }

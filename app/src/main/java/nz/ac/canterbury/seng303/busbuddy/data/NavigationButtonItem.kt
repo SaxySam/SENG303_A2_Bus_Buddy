@@ -2,7 +2,7 @@ package nz.ac.canterbury.seng303.busbuddy.data
 
 import androidx.compose.ui.graphics.vector.ImageVector
 
-data class NavigationItem(
+data class NavigationButtonItem(
     val title: String,
     val selectedIcon: ImageVector,
     val unselectedIcon: ImageVector,

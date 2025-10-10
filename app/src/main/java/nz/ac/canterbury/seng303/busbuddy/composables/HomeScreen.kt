@@ -1,54 +1,28 @@
 package nz.ac.canterbury.seng303.busbuddy.composables
 
-import android.content.Intent
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.OpenInNew
-import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.EmojiEvents
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Map
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.outlined.AccountBox
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.PlayArrow
-import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.net.toUri
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
-import nz.ac.canterbury.seng303.busbuddy.data.NavigationItem
-import nz.ac.canterbury.seng303.busbuddy.ui.theme.BlueGradientStart
-import nz.ac.canterbury.seng303.busbuddy.ui.theme.Typography
 import nz.ac.canterbury.seng303.busbuddy.utils.SectionCard
 import nz.ac.canterbury.seng303.busbuddy.utils.ShowToast
 import nz.ac.canterbury.seng303.busbuddy.utils.StyledButton
-import nz.ac.canterbury.seng303.busbuddy.utils.ThemeSwitcher
-import nz.ac.canterbury.seng303.busbuddy.utils.bounceClick
 import nz.ac.canterbury.seng303.busbuddy.utils.openURL
-import org.koin.core.component.getScopeId
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -100,7 +74,7 @@ fun HomeScreen(navController: NavController, darkTheme: Boolean, onThemeUpdated:
                             text = "Leaderboard",
                             icon = { Icon(Icons.Filled.EmojiEvents, contentDescription = null) },
                             color = MaterialTheme.colorScheme.secondary,
-                            onClick = { },
+                            onClick = { navController.navigate("Leaderboard") },
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(20.dp)
                         )

@@ -247,7 +247,8 @@ fun PlayerRow(player: Player) {
             .fillMaxWidth()
             .padding(vertical = 8.dp)
             .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(8.dp))
-            .padding(16.dp)
+            .padding(16.dp),
+        contentAlignment = Alignment.Center
     ) {
         Text(
             text = "1 | ${player.name} | ${player.currentScore}",
