@@ -172,7 +172,7 @@ class AccountDrawer() {
                         )
                         Text(
                             text = context.getString(R.string.AccountName),
-                            color = Color.Black,
+                            color = MaterialTheme.colorScheme.primary,
                             style = Typography.headlineMedium,
                             modifier = Modifier
                                 .padding(16.dp)
@@ -195,7 +195,7 @@ class AccountDrawer() {
                         )
                         Text(
                             text = context.getString(R.string.NotSignedIn),
-                            color = Color.Black,
+                            color = MaterialTheme.colorScheme.primary,
                             style = Typography.headlineSmall,
                             modifier = Modifier
                                 .padding(8.dp)
@@ -209,7 +209,7 @@ class AccountDrawer() {
                             label = {
                                 Text(
                                     text = item.title,
-                                    color = Color.Black
+                                    color = MaterialTheme.colorScheme.primary,
                                 )
                             },
                             selected = (index == selectedItemIndex),
@@ -267,20 +267,20 @@ class AccountDrawer() {
             Column {
                 Text(
                     text = context.getString(R.string.MyAccount),
-                    color = Color.Black,
+                    color = MaterialTheme.colorScheme.primary,
                     style = Typography.headlineMedium,
                     modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp)
                 )
                 if (isSignedIn) {
                     Text(
                         text = context.getString(R.string.DisplayName),
-                        color = Color.Black,
+                        color = MaterialTheme.colorScheme.primary,
                         style = Typography.titleMedium,
                         modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp)
                     )
                     Text(
                         text = context.getString(R.string.InternalName),
-                        color = Color.Black,
+                        color = MaterialTheme.colorScheme.primary,
                         style = Typography.titleMedium,
                         modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp)
                     )
@@ -288,21 +288,21 @@ class AccountDrawer() {
                     Spacer(modifier = Modifier.height(64.dp))
                     Text(
                         text = context.getString(R.string.MostTravelledRoute),
-                        color = Color.Black,
+                        color = MaterialTheme.colorScheme.primary,
                         style = Typography.headlineSmall,
                         modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp)
                     )
                     Spacer(modifier = Modifier.height(64.dp))
                     Text(
                         text = context.getString(R.string.HighestScore),
-                        color = Color.Black,
+                        color = MaterialTheme.colorScheme.primary,
                         style = Typography.headlineSmall,
                         modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp)
                     )
                     Spacer(modifier = Modifier.height(64.dp))
                     Text(
                         text = context.getString(R.string.ActiveSince),
-                        color = Color.Black,
+                        color = MaterialTheme.colorScheme.primary,
                         style = Typography.headlineSmall,
                         modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp)
                     )

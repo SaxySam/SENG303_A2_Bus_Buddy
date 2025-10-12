@@ -51,7 +51,7 @@ fun ScanBarcode(
         Spacer(modifier = Modifier.height(20.dp))
         Text(
             text = barcodeValue?: context.getString(R.string.TempValue),
-            color = Color.Black,
+            color = MaterialTheme.colorScheme.primary,
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.displaySmall
         )
